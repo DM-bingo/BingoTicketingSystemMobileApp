@@ -8,7 +8,7 @@ class Appcolors {
   static const Color ultraLightGreen = Color.fromRGBO(30, 255, 0, 1);
 
                       //Boje za Tekst
-  static const Color white = Color.fromRGBO(255, 255, 255, 0);
+  static const Color white = Color.fromRGBO(255, 255, 255, 1);
   static const Color grey = Color.fromRGBO(121, 120, 120, 0.719);
   static const Color black = Color.fromRGBO(0, 0, 0, 1);
 }
