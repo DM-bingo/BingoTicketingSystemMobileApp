@@ -1,5 +1,6 @@
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/pages/choose_option.dart';
+import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class Loginscreen extends StatefulWidget {
@@ -72,12 +73,12 @@ class Loginscreen extends StatefulWidget {
                 const SizedBox(height: 20),
 
                 const Text(
-                  'Login',
+                  AppStrings.loginText,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Appcolors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                    fontSize: 34,
                   ),
                 ),
 
@@ -88,7 +89,7 @@ class Loginscreen extends StatefulWidget {
                   obscureText: true,
                   style: const TextStyle(color: Appcolors.white),
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: AppStrings.labelTextPassword,
                     labelStyle: const TextStyle(color: Appcolors.white),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Appcolors.white),
@@ -109,7 +110,7 @@ class Loginscreen extends StatefulWidget {
                       backgroundColor: WidgetStatePropertyAll(Appcolors.green1),
                     ),
                     child: const Text(
-                      'Login',
+                      AppStrings.loginText,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Appcolors.white,
