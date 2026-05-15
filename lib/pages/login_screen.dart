@@ -65,7 +65,7 @@ class Loginscreen extends StatefulWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Image.asset(
-                  'lib/assets/images/bingo-logo.png',
+                  'assets/images/bingo-logo.png',
                   height: 100,
                   fit: BoxFit.contain,
                 ),

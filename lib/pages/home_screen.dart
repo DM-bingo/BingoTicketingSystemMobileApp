@@ -1,3 +1,6 @@
+import 'package:bingo_ticketing_system_mobile/pages/create_new_ticket.dart';
+import 'package:bingo_ticketing_system_mobile/pages/settings_page.dart';
+import 'package:bingo_ticketing_system_mobile/pages/view_existing_tickets.dart';
 import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
@@ -10,6 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+
+ void ticketScreen(BuildContext context){
+    Navigator.push(context, 
+    MaterialPageRoute(builder: (context) => const CreateNewTicket())
+    );
+   }
+
+   void viewTicketsScreen(BuildContext context){
+    Navigator.push(context, 
+    MaterialPageRoute(builder: (context) => const ViewExistingTickets()));
+   }
+
+   void settingScreen(BuildContext context){
+    Navigator.push(context,
+     MaterialPageRoute(builder: (context)=> const SettingsPage()));
+   }
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -43,7 +64,7 @@ class _HomeScreen extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(10)
                     )
                   ),
-                  onPressed: () =>{},
+                  onPressed: () =>ticketScreen(context),
                  child: Text(AppStrings.createTicket, )        
                   ),
               ),
@@ -60,7 +81,7 @@ class _HomeScreen extends State<HomeScreen> {
                     )
                   ),
                   
-                  onPressed: () =>{}, 
+                  onPressed: () =>viewTicketsScreen(context), 
                 child: Text(AppStrings.viewExistingTickets)),
               ),
 
@@ -75,7 +96,7 @@ class _HomeScreen extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(10)
                     )
                   ),
-                  onPressed: () =>{},
+                  onPressed: () =>settingScreen(context),
                   child: Text(AppStrings.settingsText),
                 ),
               )

@@ -55,7 +55,7 @@ class _ChooseOption extends State<ChooseOption> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Image.asset(
-                    'lib/assets/images/bingo-logo.png',
+                    'assets/images/bingo-logo.png',
                     height: 100,
                     fit: BoxFit.contain,
                   ),

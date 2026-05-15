@@ -9,4 +9,7 @@ class AppStrings {
   static const String createTicket = 'NAPRAVI TIKET';
   static const String viewExistingTickets = 'PREGLEDAJ POSTOJEĆE TIKETE';
   static const String settingsText = 'POSTAVKE';
+  static const String demo1 = 'NAPRAVI NOVI TIKET EKRAN';
+  static const String demo2 = 'PRELGEDAJ POSTOJECE TIKETE EKRAN';
+  static const String demo3 = 'POSTAVKE EKRAN';
 }
