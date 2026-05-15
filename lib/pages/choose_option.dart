@@ -78,7 +78,7 @@ class _ChooseOption extends State<ChooseOption> {
                     labelText: AppStrings.chooseOption,
                     border: OutlineInputBorder(),
                   ),
-                  value: selectedValue,
+                  initialValue: selectedValue,
                   hint: const Text(
                     AppStrings.chooseOption,
                     style: TextStyle(color: Appcolors.white),

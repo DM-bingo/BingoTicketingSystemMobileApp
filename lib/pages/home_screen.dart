@@ -31,14 +31,16 @@ class _HomeScreen extends State<HomeScreen> {
         ),
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: 300,
                 height: 150,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero
+                    shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
                     )
                   ),
                   onPressed: () =>{},
@@ -53,8 +55,8 @@ class _HomeScreen extends State<HomeScreen> {
                 height: 150,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero
+                    shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
                     )
                   ),
                   
@@ -69,8 +71,8 @@ class _HomeScreen extends State<HomeScreen> {
                 height: 150,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero
+                    shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
                     )
                   ),
                   onPressed: () =>{},
