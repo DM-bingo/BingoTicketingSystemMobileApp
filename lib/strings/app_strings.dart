@@ -6,5 +6,7 @@ class AppStrings {
   static const String labelTextPassword = 'Password';
   static const String chooseOption = 'Izaberite opciju';
   static const String saveText = 'Save';
-
+  static const String createTicket = 'NAPRAVI TIKET';
+  static const String viewExistingTickets = 'PREGLEDAJ POSTOJEĆE TIKETE';
+  static const String settingsText = 'POSTAVKE';
 }
