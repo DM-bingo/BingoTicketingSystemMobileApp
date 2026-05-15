@@ -1,4 +1,4 @@
-import 'package:bingo_ticketing_system_mobile/pages/loginScreen.dart';
+import 'package:bingo_ticketing_system_mobile/pages/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
