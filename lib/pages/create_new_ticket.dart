@@ -60,21 +60,50 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     'Liftovi, Pokretne Stepenice, Travelator',
   ];
 
+  List<String> tehnoloskaOprema2 = [
+    'Oprema Za Termičku Obradu Hrane',
+    'Rashladna Oprema Kuhinje',
+    'Pomoćni Kuhinjski Uređaji',
+    'Uređaji/Mašine Za pranje',
+    'Salamoreznica',
+  ];
+
+  List<String> opremaZaTermickuObraduHrane = [
+    'Peć - Konvekcijska',
+    'Peć - Pizza',
+    'Peć - Pilići',
+    'Peć - Fermentacijska',
+    'Peć - Štednjak',
+    'Roštilj',
+    'Friteza',
+    'Sać',
+    'Kiper',
+    'Palačinkar',
+  ];
+
   late final Map<String, List<String>> _subServiceData = {
     'Elektroinstalacije': listOfElectroOptions,
     'Mašinske Instalacije': listOfMachineOptions,
+    'Tehnološka Oprema': tehnoloskaOprema2,
+    'Oprema Za Termičku Obradu Hrane': opremaZaTermickuObraduHrane,
   };
 
   String? optionsValue;
   String? _selectedService;
-  String? _selectedSubOption;
+  String? _selectedSubOptionLevel2;
+  String? _selectedSubOptionLevel3;
 
-  List<XFile> _selectedImages = [];
+  final List<XFile> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
+
+  void podnesiZahtjev() {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text(AppStrings.requestSend)));
+  }
 
   Future<void> _pickImages() async {
     final List<XFile> images = await _picker.pickMultiImage();
-
     if (images.isNotEmpty) {
       setState(() {
         _selectedImages.addAll(images);
@@ -84,7 +113,10 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> currentSubOptions = _subServiceData[_selectedService] ?? [];
+    List<String> level2Options = _subServiceData[_selectedService] ?? [];
+
+    List<String> level3Options =
+        _subServiceData[_selectedSubOptionLevel2] ?? [];
 
     return Scaffold(
       body: Container(
@@ -105,250 +137,234 @@ class _CreateNewTicket extends State<CreateNewTicket> {
         ),
         child: Center(
           child: SingleChildScrollView(
-          child: Container(
-            width: 600,
-            height: 800,
-            padding: const EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              color: Appcolors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: AppStrings.requestType,
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: options[0],
-                  hint: const Text(
-                    AppStrings.requestType,
-                    style: TextStyle(color: Appcolors.white),
-                  ),
-                  items: options.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedValue = newValue;
-                    });
-                  },
-                ),
-                const SizedBox(height: 40),
-
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: AppStrings.objectText,
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: options1[0],
-                  hint: const Text(
-                    AppStrings.objectText,
-                    style: TextStyle(color: Appcolors.white),
-                  ),
-                  items: options1.map((String value1) {
-                    return DropdownMenuItem<String>(
-                      value: value1,
-                      child: Text(value1),
-                    );
-                  }).toList(),
-                  onChanged: (newValue1) {
-                    setState(() {
-                      selectedValue1 = newValue1;
-                    });
-                  },
-                ),
-                const SizedBox(height: 40),
-
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: AppStrings.priorityText,
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: priorityValues[1],
-                  hint: const Text(
-                    AppStrings.priorityText,
-                    style: TextStyle(color: Appcolors.white),
-                  ),
-                  items: priorityValues.map((String prio) {
-                    return DropdownMenuItem<String>(
-                      value: prio,
-                      child: Text(prio),
-                    );
-                  }).toList(),
-                  onChanged: (prioNew) {
-                    setState(() {
-                      priority = prioNew;
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 20),
-
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: AppStrings.requestText,
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: listOfOptions[0],
-                  hint: const Text(
-                    AppStrings.requestText,
-                    style: TextStyle(color: Appcolors.white),
-                  ),
-                  items: listOfOptions.map((String opt) {
-                    return DropdownMenuItem<String>(
-                      value: opt,
-                      child: Text(opt),
-                    );
-                  }).toList(),
-                  onChanged: (optNew) {
-                    setState(() {
-                      optionsValue = optNew;
-                      _selectedService = null;
-                      _selectedSubOption = null;
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 20),
-
-                if (optionsValue == 'SERVIS') ...[
+            child: Container(
+              width: 600,
+              padding: const EdgeInsets.all(24.0),
+              decoration: BoxDecoration(
+                color: Appcolors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: 'Tip Servisa',
+                    menuMaxHeight: 300,
+                    decoration: InputDecoration(
+                      labelText: AppStrings.requestType,
                       border: OutlineInputBorder(),
                     ),
-                    initialValue: _selectedService,
-                    hint: const Text('Izaberi tip servisa'),
-                    items: listOfServiceOptions.map((String service) {
-                      return DropdownMenuItem<String>(
-                        value: service,
-                        child: Text(service),
-                      );
-                    }).toList(),
-                    onChanged: (newService) {
+                    initialValue: selectedValue,
+                    items: options
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (v) => setState(() => selectedValue = v),
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    menuMaxHeight: 300,
+                    decoration: InputDecoration(
+                      labelText: AppStrings.objectText,
+                      border: OutlineInputBorder(),
+                    ),
+                    initialValue: selectedValue1,
+                    items: options1
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (v) => setState(() => selectedValue1 = v),
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    menuMaxHeight: 300,
+                    decoration: InputDecoration(
+                      labelText: AppStrings.priorityText,
+                      border: OutlineInputBorder(),
+                    ),
+                    initialValue: priority,
+                    items: priorityValues
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (v) => setState(() => priority = v),
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: AppStrings.requestText,
+                      border: OutlineInputBorder(),
+                    ),
+                    initialValue: optionsValue,
+                    items: listOfOptions
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (v) {
                       setState(() {
-                        _selectedService = newService;
-                        _selectedSubOption = null;
+                        optionsValue = v;
+                        _selectedService = null;
+                        _selectedSubOptionLevel2 = null;
+                        _selectedSubOptionLevel3 = null;
                       });
                     },
                   ),
                   const SizedBox(height: 20),
-                ],
-
-                if (optionsValue == 'SERVIS' &&
-                    currentSubOptions.isNotEmpty) ...[
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Specifična opcija',
-                      border: OutlineInputBorder(),
+                  if (optionsValue == 'SERVIS') ...[
+                    DropdownButtonFormField<String>(
+                      menuMaxHeight: 300,
+                      decoration: const InputDecoration(
+                        labelText: 'Tip Servisa',
+                        border: OutlineInputBorder(),
+                      ),
+                      initialValue: _selectedService,
+                      items: listOfServiceOptions
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
+                      onChanged: (v) {
+                        setState(() {
+                          _selectedService = v;
+                          _selectedSubOptionLevel2 = null;
+                          _selectedSubOptionLevel3 = null;
+                        });
+                      },
                     ),
-                    initialValue: _selectedSubOption,
-                    hint: const Text('Izaberite opciju'),
-                    items: currentSubOptions.map((String subOpt) {
-                      return DropdownMenuItem<String>(
-                        value: subOpt,
-                        child: Text(subOpt),
-                      );
-                    }).toList(),
-                    onChanged: (newSubOpt) {
-                      setState(() {
-                        _selectedSubOption = newSubOpt;
-                      });
-                    },
-                  ),
-                ],
-
-                const SizedBox(height: 20),
-
-                Container(
-                  width: 600,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 150,
-                        child: TextField(
-                          maxLines: null,
-                          expands: true,
-                          textAlignVertical: TextAlignVertical.top,
-                          decoration: InputDecoration(
-                            hintText: 'Unesite opis zahtjeva...',
-                            border: InputBorder.none,
+                    const SizedBox(height: 20),
+                  ],
+                  if (level2Options.isNotEmpty) ...[
+                    DropdownButtonFormField<String>(
+                      menuMaxHeight: 300,
+                      decoration: InputDecoration(
+                        labelText: AppStrings.chooseOption1,
+                        border: OutlineInputBorder(),
+                      ),
+                      initialValue: _selectedSubOptionLevel2,
+                      items: level2Options
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
+                      onChanged: (v) {
+                        setState(() {
+                          _selectedSubOptionLevel2 = v;
+                          _selectedSubOptionLevel3 = null;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                  if (level3Options.isNotEmpty) ...[
+                    DropdownButtonFormField<String>(
+                      menuMaxHeight: 300,
+                      decoration: InputDecoration(
+                        labelText: AppStrings.chooseOption1,
+                        border: OutlineInputBorder(),
+                      ),
+                      initialValue: _selectedSubOptionLevel3,
+                      items: level3Options
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
+                      onChanged: (v) {
+                        setState(() {
+                          _selectedSubOptionLevel3 = v;
+                        });
+                      },
+                    ),
+                  ],
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 600,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 150,
+                          child: TextField(
+                            maxLines: null,
+                            expands: true,
+                            decoration: InputDecoration(
+                              hintText: 'Unesite opis zahtjeva...',
+                              border: InputBorder.none,
+                            ),
                           ),
                         ),
-                      ),
-
-                      const Divider(),
-
-                      if (_selectedImages.isNotEmpty)
-                        SizedBox(
-                          height: 80,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _selectedImages.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Stack(
-                                  children: [
-                                    Image.file(
-                                      File(_selectedImages[index].path),
-                                      width: 80,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedImages.removeAt(index);
-                                          });
-                                        },
-                                        child: const CircleAvatar(
-                                          radius: 10,
-                                          backgroundColor: Colors.red,
-                                          child: Icon(
-                                            Icons.close,
-                                            size: 12,
-                                            color: Colors.white,
+                        const Divider(),
+                        if (_selectedImages.isNotEmpty)
+                          SizedBox(
+                            height: 80,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _selectedImages.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Stack(
+                                    children: [
+                                      Image.file(
+                                        File(_selectedImages[index].path),
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _selectedImages.removeAt(index);
+                                            });
+                                          },
+                                          child: const CircleAvatar(
+                                            radius: 10,
+                                            backgroundColor: Colors.red,
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 12,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        TextButton.icon(
+                          onPressed: _pickImages,
+                          icon: const Icon(Icons.add_a_photo),
+                          label: const Text(AppStrings.pictureText),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: SizedBox(
+                      width: 300,
+                      height: 40,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                      TextButton.icon(
-                        onPressed: _pickImages,
-                        icon: const Icon(Icons.add_a_photo),
-                        label: const Text('Priloži slike'),
+                        onPressed: () => podnesiZahtjev(),
+                        child: Text(AppStrings.requestSend2),
                       ),
-                    ],
+                    ),
                   ),
-                
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-      )
     );
   }
 }

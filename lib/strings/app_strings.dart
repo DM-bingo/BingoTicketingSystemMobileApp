@@ -16,4 +16,10 @@ class AppStrings {
   static const String objectText = 'Objekat';
   static const String priorityText = 'Prioritet';
   static const String requestText = 'Zahtjev';
+  static const String requestSend = 'Zahtjev podnešen';
+  static const String requestSend2 = 'Podnesi Zahtjev';
+  static const String serviceType = 'Izaberi tip servisa';
+  static const String chooseOption1 = 'Izaberite opciju';
+  static const String typeNabava = 'Tip nabave';
+  static const String pictureText = 'Dodaj slike';
 }
