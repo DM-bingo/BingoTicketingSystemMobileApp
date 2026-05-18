@@ -12,4 +12,8 @@ class AppStrings {
   static const String demo1 = 'NAPRAVI NOVI TIKET EKRAN';
   static const String demo2 = 'PRELGEDAJ POSTOJECE TIKETE EKRAN';
   static const String demo3 = 'POSTAVKE EKRAN';
+  static const String requestType = 'Tip zahtjeva';
+  static const String objectText = 'Objekat';
+  static const String priorityText = 'Prioritet';
+  static const String requestText = 'Zahtjev';
 }
