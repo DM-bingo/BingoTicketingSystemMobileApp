@@ -104,6 +104,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
           ),
         ),
         child: Center(
+          child: SingleChildScrollView(
           child: Container(
             width: 600,
             height: 800,
@@ -340,12 +341,14 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       ),
                     ],
                   ),
+                
                 ),
               ],
             ),
           ),
         ),
       ),
+      )
     );
   }
 }
