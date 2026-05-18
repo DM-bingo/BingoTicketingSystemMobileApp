@@ -9,4 +9,17 @@ class AppStrings {
   static const String createTicket = 'NAPRAVI TIKET';
   static const String viewExistingTickets = 'PREGLEDAJ POSTOJEĆE TIKETE';
   static const String settingsText = 'POSTAVKE';
+  static const String demo1 = 'NAPRAVI NOVI TIKET EKRAN';
+  static const String demo2 = 'PRELGEDAJ POSTOJECE TIKETE EKRAN';
+  static const String demo3 = 'POSTAVKE EKRAN';
+  static const String requestType = 'Tip zahtjeva';
+  static const String objectText = 'Objekat';
+  static const String priorityText = 'Prioritet';
+  static const String requestText = 'Zahtjev';
+  static const String requestSend = 'Zahtjev podnešen';
+  static const String requestSend2 = 'Podnesi Zahtjev';
+  static const String serviceType = 'Izaberi tip servisa';
+  static const String chooseOption1 = 'Izaberite opciju';
+  static const String typeNabava = 'Tip nabave';
+  static const String pictureText = 'Dodaj slike';
 }
