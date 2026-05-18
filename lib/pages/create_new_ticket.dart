@@ -4,7 +4,7 @@ import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:http/http.dart' as http;
 class CreateNewTicket extends StatefulWidget {
   const CreateNewTicket({super.key});
 
@@ -109,6 +109,16 @@ class _CreateNewTicket extends State<CreateNewTicket> {
         _selectedImages.addAll(images);
       });
     }
+  }
+
+  Future<http.Response> deleteAlbum(String id) async{
+    final http.Response reresponse = await http.delete(
+      Uri.parse('url'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      }
+    );
+    return reresponse; 
   }
 
   @override
