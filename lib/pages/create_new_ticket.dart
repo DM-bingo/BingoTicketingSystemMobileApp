@@ -153,7 +153,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       labelText: AppStrings.requestType,
                       border: OutlineInputBorder(),
                     ),
-                    initialValue: selectedValue,
+                    initialValue: options[0],
                     items: options
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
@@ -166,7 +166,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       labelText: AppStrings.objectText,
                       border: OutlineInputBorder(),
                     ),
-                    initialValue: selectedValue1,
+                    initialValue: options1[0],
                     items: options1
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
@@ -179,7 +179,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       labelText: AppStrings.priorityText,
                       border: OutlineInputBorder(),
                     ),
-                    initialValue: priority,
+                    initialValue: priorityValues[1],
                     items: priorityValues
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
