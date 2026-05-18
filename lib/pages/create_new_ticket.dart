@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateNewTicket extends StatefulWidget {
   const CreateNewTicket({super.key});
@@ -23,10 +26,8 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   String? priority;
   List<String> priorityValues = ['Nizak', 'Srednji', 'Visok'];
 
-  String? optionsValue;
   List<String> listOfOptions = ['SERVIS', 'NABAVA'];
 
-  String? serviceOptions;
   List<String> listOfServiceOptions = [
     'Elektroinstalacije',
     'Mašinske Instalacije',
@@ -41,7 +42,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     'Tehnološka Oprema',
   ];
 
-  String? electroOptions;
   List<String> listOfElectroOptions = [
     'Elektroinstalacije-Rasvjeta',
     'Agregati',
@@ -51,7 +51,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     'Razglas',
   ];
 
-  String? machineOptions;
   List<String> listOfMachineOptions = [
     'Grijanje',
     'Hlađenje',
@@ -61,8 +60,32 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     'Liftovi, Pokretne Stepenice, Travelator',
   ];
 
+  late final Map<String, List<String>> _subServiceData = {
+    'Elektroinstalacije': listOfElectroOptions,
+    'Mašinske Instalacije': listOfMachineOptions,
+  };
+
+  String? optionsValue;
+  String? _selectedService;
+  String? _selectedSubOption;
+
+  List<XFile> _selectedImages = [];
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImages() async {
+    final List<XFile> images = await _picker.pickMultiImage();
+
+    if (images.isNotEmpty) {
+      setState(() {
+        _selectedImages.addAll(images);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<String> currentSubOptions = _subServiceData[_selectedService] ?? [];
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -83,7 +106,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
         child: Center(
           child: Container(
             width: 600,
-            height: 700,
+            height: 800,
             padding: const EdgeInsets.all(24.0),
             decoration: BoxDecoration(
               color: Appcolors.white,
@@ -184,23 +207,138 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                   onChanged: (optNew) {
                     setState(() {
                       optionsValue = optNew;
+                      _selectedService = null;
+                      _selectedSubOption = null;
                     });
                   },
                 ),
 
                 const SizedBox(height: 20),
 
-                SizedBox(
-                  width: 600,
-                  height: 200,
-                  child: TextField(
-                    maxLines: null,
-                    expands: true,
-                    textAlignVertical: TextAlignVertical.top,
-                    decoration: InputDecoration(
-                      hintText: 'Unesite Opis Zahtjeva...',
+                if (optionsValue == 'SERVIS') ...[
+                  DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Tip Servisa',
                       border: OutlineInputBorder(),
                     ),
+                    initialValue: _selectedService,
+                    hint: const Text('Izaberi tip servisa'),
+                    items: listOfServiceOptions.map((String service) {
+                      return DropdownMenuItem<String>(
+                        value: service,
+                        child: Text(service),
+                      );
+                    }).toList(),
+                    onChanged: (newService) {
+                      setState(() {
+                        _selectedService = newService;
+                        _selectedSubOption = null;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
+
+                if (optionsValue == 'SERVIS' &&
+                    currentSubOptions.isNotEmpty) ...[
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'Specifična opcija',
+                      border: OutlineInputBorder(),
+                    ),
+                    initialValue: _selectedSubOption,
+                    hint: const Text('Izaberite opciju'),
+                    items: currentSubOptions.map((String subOpt) {
+                      return DropdownMenuItem<String>(
+                        value: subOpt,
+                        child: Text(subOpt),
+                      );
+                    }).toList(),
+                    onChanged: (newSubOpt) {
+                      setState(() {
+                        _selectedSubOption = newSubOpt;
+                      });
+                    },
+                  ),
+                ],
+
+                const SizedBox(height: 20),
+
+                Container(
+                  width: 600,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 150,
+                        child: TextField(
+                          maxLines: null,
+                          expands: true,
+                          textAlignVertical: TextAlignVertical.top,
+                          decoration: InputDecoration(
+                            hintText: 'Unesite opis zahtjeva...',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+
+                      const Divider(),
+
+                      if (_selectedImages.isNotEmpty)
+                        SizedBox(
+                          height: 80,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _selectedImages.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Stack(
+                                  children: [
+                                    Image.file(
+                                      File(_selectedImages[index].path),
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedImages.removeAt(index);
+                                          });
+                                        },
+                                        child: const CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor: Colors.red,
+                                          child: Icon(
+                                            Icons.close,
+                                            size: 12,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      TextButton.icon(
+                        onPressed: _pickImages,
+                        icon: const Icon(Icons.add_a_photo),
+                        label: const Text('Priloži slike'),
+                      ),
+                    ],
                   ),
                 ),
               ],
