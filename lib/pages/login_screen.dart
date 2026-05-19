@@ -1,7 +1,7 @@
+import 'package:bingo_ticketing_system_mobile/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
-import 'package:bingo_ticketing_system_mobile/pages/choose_option.dart';
 import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
 
 class Loginscreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class _LoginscreenState extends State<Loginscreen> {
     if (password == 'admin') {
       Navigator.push(
         context,
-        MaterialPageRoute<void>(builder: (context) => const ChooseOption()),
+        MaterialPageRoute<void>(builder: (context) => const HomeScreen()),
       );
     } else {
       ScaffoldMessenger.of(

@@ -14,7 +14,7 @@ class CreateNewTicket extends StatefulWidget {
 
 class _CreateNewTicket extends State<CreateNewTicket> {
   String? selectedValue;
-  List<String> options = ['IT Održavanje', 'Eleketricari', 'Građevina'];
+  List<String> options = ['Održavanje objekata', 'IT', 'Sigurnost i Video Nadzor','Motorna vozila'];
 
   String? selectedValue1;
   List<String> options1 = [
@@ -97,9 +97,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   final ImagePicker _picker = ImagePicker();
 
   void podnesiZahtjev() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text(AppStrings.requestSend)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text(AppStrings.requestSend)));
   }
 
   Future<void> _pickImages() async {
@@ -114,16 +114,15 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   Future<http.Response> deleteAlbum(String id) async {
     return await http.delete(
       Uri.parse('url'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
   }
 
   @override
   Widget build(BuildContext context) {
     List<String> level2Options = _subServiceData[_selectedService] ?? [];
-    List<String> level3Options = _subServiceData[_selectedSubOptionLevel2] ?? [];
+    List<String> level3Options =
+        _subServiceData[_selectedSubOptionLevel2] ?? [];
 
     return Scaffold(
       body: Column(
@@ -133,10 +132,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Appcolors.green1,
-                  Appcolors.green2,
-                ],
+                colors: [Appcolors.green1, Appcolors.green2],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -191,7 +187,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                 ),
                 child: Column(
                   children: [
-
                     DropdownButtonFormField<String>(
                       initialValue: selectedValue ?? options.first,
                       decoration: InputDecoration(
@@ -200,21 +195,29 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      items: options.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      items: options
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
                       onChanged: (v) => setState(() => selectedValue = v),
                     ),
 
                     const SizedBox(height: 15),
 
                     DropdownButtonFormField<String>(
-                        initialValue: selectedValue1 ?? options1.first,
+                      initialValue: selectedValue1 ?? options1.first,
                       decoration: InputDecoration(
                         labelText: AppStrings.objectText,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      items: options1.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      items: options1
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
                       onChanged: (v) => setState(() => selectedValue1 = v),
                     ),
 
@@ -228,7 +231,11 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      items: priorityValues.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      items: priorityValues
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
                       onChanged: (v) => setState(() => priority = v),
                     ),
 
@@ -242,7 +249,11 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      items: listOfOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      items: listOfOptions
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
                       onChanged: (v) {
                         setState(() {
                           optionsValue = v;
@@ -264,7 +275,11 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        items: listOfServiceOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        items: listOfServiceOptions
+                            .map(
+                              (e) => DropdownMenuItem(value: e, child: Text(e)),
+                            )
+                            .toList(),
                         onChanged: (v) {
                           setState(() {
                             _selectedService = v;
@@ -285,7 +300,11 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        items: level2Options.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        items: level2Options
+                            .map(
+                              (e) => DropdownMenuItem(value: e, child: Text(e)),
+                            )
+                            .toList(),
                         onChanged: (v) {
                           setState(() {
                             _selectedSubOptionLevel2 = v;
@@ -305,7 +324,11 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        items: level3Options.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        items: level3Options
+                            .map(
+                              (e) => DropdownMenuItem(value: e, child: Text(e)),
+                            )
+                            .toList(),
                         onChanged: (v) {
                           setState(() {
                             _selectedSubOptionLevel3 = v;
@@ -347,7 +370,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                                     child: Stack(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                           child: Image.file(
                                             File(_selectedImages[index].path),
                                             width: 80,
@@ -367,7 +392,11 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                                             child: const CircleAvatar(
                                               radius: 10,
                                               backgroundColor: Appcolors.red,
-                                              child: Icon(Icons.close, size: 12, color: Appcolors.white),
+                                              child: Icon(
+                                                Icons.close,
+                                                size: 12,
+                                                color: Appcolors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -395,10 +424,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           gradient: const LinearGradient(
-                            colors: [
-                              Appcolors.green1,
-                              Appcolors.green3,
-                            ],
+                            colors: [Appcolors.green1, Appcolors.green3],
                           ),
                         ),
                         child: Material(
@@ -419,7 +445,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),

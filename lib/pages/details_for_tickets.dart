@@ -46,34 +46,36 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green,
-                              borderRadius:
-                                  BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: const Text(
                               'IT ODRŽAVANJE',
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12),
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 10),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 6),
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade300,
-                              borderRadius:
-                                  BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: const Text(
                               '028',
@@ -84,17 +86,16 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFE5B4),
-                          borderRadius:
-                              BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
                           'Na čekanju',
-                          style: TextStyle(
-                              color: Colors.orange,
-                              fontSize: 12),
+                          style: TextStyle(color: Colors.orange, fontSize: 12),
                         ),
                       ),
                     ],
@@ -102,9 +103,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                   const SizedBox(height: 20),
                   const Text(
                     'Problem sa printerom',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text(
@@ -116,24 +115,20 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                   const SizedBox(height: 15),
                   Row(
                     children: const [
-                      Icon(Icons.person_outline,
-                          size: 18, color: Colors.green),
+                      Icon(Icons.person_outline, size: 18, color: Colors.green),
                       SizedBox(width: 6),
                       Text('Odgovorna osoba: '),
                       Text(
                         'Mirza Šabanović',
-                        style:
-                            TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                       SizedBox(width: 30),
-                      Icon(Icons.calendar_today,
-                          size: 18, color: Colors.green),
+                      Icon(Icons.calendar_today, size: 18, color: Colors.green),
                       SizedBox(width: 6),
                       Text('Rok: '),
                       Text(
                         '12.06.2026',
-                        style:
-                            TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -145,9 +140,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                   const SizedBox(height: 20),
                   const Text(
                     'Slike',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
@@ -157,11 +150,9 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       itemCount: images.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding:
-                              const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.only(right: 10),
                           child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10),
                             child: Image.network(
                               images[index],
                               width: 120,
@@ -181,14 +172,13 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () {},
                       child: const Text('Zatvori ticket'),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
