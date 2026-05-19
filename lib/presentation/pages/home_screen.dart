@@ -1,9 +1,9 @@
-import 'package:bingo_ticketing_system_mobile/pages/create_new_ticket.dart';
-import 'package:bingo_ticketing_system_mobile/pages/settings_page.dart';
-import 'package:bingo_ticketing_system_mobile/pages/view_existing_tickets.dart';
-import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/create_new_ticket.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/settings_page.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/view_existing_tickets.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,17 +13,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
-
-  void ticketScreen(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewTicket()));
+  void ticketScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateNewTicket()),
+    );
   }
 
-  void viewTicketsScreen(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewExistingTickets()));
+  void viewTicketsScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ViewExistingTickets()),
+    );
   }
 
-  void settingScreen(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> const SettingsPage()));
+  void settingScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsPage()),
+    );
   }
 
   @override
@@ -31,16 +39,12 @@ class _HomeScreen extends State<HomeScreen> {
     return Scaffold(
       body: Column(
         children: [
-
           Container(
             height: 280,
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Appcolors.green1,
-                  Appcolors.green2,
-                ],
+                colors: [Appcolors.green1, Appcolors.green2],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -72,7 +76,7 @@ class _HomeScreen extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -82,7 +86,6 @@ class _HomeScreen extends State<HomeScreen> {
               padding: const EdgeInsets.all(25),
               child: Column(
                 children: [
-
                   GestureDetector(
                     onTap: () => ticketScreen(context),
                     child: Container(
@@ -101,7 +104,11 @@ class _HomeScreen extends State<HomeScreen> {
                       ),
                       child: Row(
                         children: const [
-                          Icon(Icons.add_circle, color: Appcolors.green1, size: 40),
+                          Icon(
+                            Icons.add_circle,
+                            color: Appcolors.green1,
+                            size: 40,
+                          ),
                           SizedBox(width: 20),
                           Expanded(
                             child: Text(
@@ -112,7 +119,7 @@ class _HomeScreen extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios, size: 18)
+                          Icon(Icons.arrow_forward_ios, size: 18),
                         ],
                       ),
                     ),
@@ -136,7 +143,11 @@ class _HomeScreen extends State<HomeScreen> {
                       ),
                       child: Row(
                         children: const [
-                          Icon(Icons.list_alt, color: Appcolors.green1, size: 40),
+                          Icon(
+                            Icons.list_alt,
+                            color: Appcolors.green1,
+                            size: 40,
+                          ),
                           SizedBox(width: 20),
                           Expanded(
                             child: Text(
@@ -147,7 +158,7 @@ class _HomeScreen extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios, size: 18)
+                          Icon(Icons.arrow_forward_ios, size: 18),
                         ],
                       ),
                     ),
@@ -170,7 +181,11 @@ class _HomeScreen extends State<HomeScreen> {
                       ),
                       child: Row(
                         children: const [
-                          Icon(Icons.settings, color: Appcolors.green1, size: 40),
+                          Icon(
+                            Icons.settings,
+                            color: Appcolors.green1,
+                            size: 40,
+                          ),
                           SizedBox(width: 20),
                           Expanded(
                             child: Text(
@@ -181,12 +196,11 @@ class _HomeScreen extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios, size: 18)
+                          Icon(Icons.arrow_forward_ios, size: 18),
                         ],
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

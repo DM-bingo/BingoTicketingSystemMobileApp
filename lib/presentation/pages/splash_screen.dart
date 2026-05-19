@@ -1,4 +1,4 @@
-import 'package:bingo_ticketing_system_mobile/pages/login_screen.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

@@ -28,7 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-
   flutter:
     sdk: flutter
 
@@ -39,11 +38,12 @@ dependencies:
   cupertino_icons: ^1.0.8
   lottie: ^3.3.3
   http: ^1.6.0
+  flutter_secure_storage: ^10.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_launcher_icons: ^0.14.4  
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -51,15 +51,28 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+# Konfiguracija za ikone mora biti na početku linije (glavni nivo)
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/launcherIcon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/foreground.png"
+  remove_alpha_ios: true # Uklanja alpha kanal zbog Apple App Store pravila
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
+  
+  # Registrovanje svih slika i resursa u aplikaciji
   assets:
     - assets/images/bingo-logo.png
     - assets/splash.json
+    - assets/launcherIcon.png
+    - assets/foreground.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -95,4 +108,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+  # see https://flutter.dev/to/font-from-package 
