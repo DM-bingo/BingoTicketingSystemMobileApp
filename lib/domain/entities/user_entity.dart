@@ -1,22 +1,22 @@
 class UserEntity {
- final int Id;
- final String Username;
- final String PasswordHash;
- final String Role;
- final String? ActivatonCode;
- final bool IsActive;
- final String? RefreshToken;
- final DateTime? RefreshTokenExpiryTime;
+ final int id;
+ final String username;
+ final String passwordHash;
+ final String role;
+ final String? activatonCode;
+ final bool isActive;
+ final String? refreshToken;
+ final DateTime? refreshTokenExpiryTime;
 
  const UserEntity({
-  required this.Id,
-  required this.Username,
-  required this.PasswordHash,
-  required this.Role,
-  required this.ActivatonCode,
-  required this.IsActive,
-  required this.RefreshToken,
-  required this.RefreshTokenExpiryTime
+  required this.id,
+  required this.username,
+  required this.passwordHash,
+  required this.role,
+  required this.activatonCode,
+  required this.isActive,
+  required this.refreshToken,
+  required this.refreshTokenExpiryTime
 
  });
 }

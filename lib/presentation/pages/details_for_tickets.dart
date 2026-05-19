@@ -1,4 +1,4 @@
-import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class DetailsForTickets extends StatefulWidget {

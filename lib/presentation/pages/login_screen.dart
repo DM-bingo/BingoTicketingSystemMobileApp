@@ -1,8 +1,12 @@
-import 'package:bingo_ticketing_system_mobile/pages/home_screen.dart';
+import 'package:bingo_ticketing_system_mobile/data/repositories/auth_repository_impl.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/auth_service.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/controllers/auth_controller.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
-import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -14,18 +18,34 @@ class Loginscreen extends StatefulWidget {
 class _LoginscreenState extends State<Loginscreen> {
   final TextEditingController _passwordController = TextEditingController();
 
-  void checkPassword(BuildContext context, password) {
-    if (password == 'admin') {
-      Navigator.push(
-        context,
-        MaterialPageRoute<void>(builder: (context) => const HomeScreen()),
-      );
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text(AppStrings.wrongPassword)));
-    }
+
+final controller = AuthController(
+  AuthRepositoryImpl(AuthService()),
+  AuthStorage(),
+);
+
+void login(BuildContext context) async {
+  debugPrint("LOGIN CLICKED");
+
+  bool success = await controller.login(_passwordController.text);
+
+  debugPrint("SUCCESS: $success");
+
+  if (success) {
+    debugPrint("NAVIGATING...");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  } else {
+    debugPrint("FAILED LOGIN");
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Invalid OTP")),
+    );
   }
+}
+
 
   @override
   void dispose() {
@@ -124,7 +144,7 @@ class _LoginscreenState extends State<Loginscreen> {
                     duration: const Duration(milliseconds: 1700),
                     child: GestureDetector(
                       onTap: () =>
-                          checkPassword(context, _passwordController.text),
+                          login(context),
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(

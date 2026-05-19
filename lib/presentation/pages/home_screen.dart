@@ -1,9 +1,9 @@
-import 'package:bingo_ticketing_system_mobile/pages/create_new_ticket.dart';
-import 'package:bingo_ticketing_system_mobile/pages/settings_page.dart';
-import 'package:bingo_ticketing_system_mobile/pages/view_existing_tickets.dart';
-import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/create_new_ticket.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/settings_page.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/view_existing_tickets.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,4 +1,4 @@
-import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
+import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
