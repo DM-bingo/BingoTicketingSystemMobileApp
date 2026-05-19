@@ -24,106 +24,123 @@ class _ChooseOption extends State<ChooseOption> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment(0.8, 1),
-            colors: <Color>[
-              Appcolors.green1,
-              Appcolors.green2,
-              Appcolors.green3,
-              Appcolors.green4,
-            ],
-            tileMode: TileMode.mirror,
-          ),
-        ),
-        child: Center(
-          child: Container(
-            height: 500,
-            width: 500,
-            padding: const EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              color: Appcolors.lightGreen,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Image.asset(
-                    'assets/images/bingo-logo.png',
-                    height: 100,
-                    fit: BoxFit.contain,
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 300,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Appcolors.green1, Appcolors.green2],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    AppStrings.chooseOption,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Appcolors.white,
-                      fontSize: 24,
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 80,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/bingo-logo.png',
+                        height: 90,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(  
-                    labelText: AppStrings.chooseOption,
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: selectedValue,
-                  hint: const Text(
-                    AppStrings.chooseOption,
-                    style: TextStyle(color: Appcolors.white),
-                  ),
-                  items: options.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedValue = newValue;
-                    });
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () => saveHandler(context),
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                          Appcolors.green1,
-                        ),
-                      ),
+
+                  Positioned(
+                    bottom: 30,
+                    left: 0,
+                    right: 0,
+                    child: const Center(
                       child: Text(
-                        AppStrings.saveText,
+                        AppStrings.chooseOption,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
                           color: Appcolors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+
+            Padding(
+              padding: const EdgeInsets.all(30),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Appcolors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Appcolors.green2.withValues(),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedValue,
+                      decoration: InputDecoration(
+                        labelText: AppStrings.chooseOption,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Appcolors.green1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: options.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedValue = newValue;
+                        });
+                      },
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    GestureDetector(
+                      onTap: () => saveHandler(context),
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [Appcolors.green1, Appcolors.green3],
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            AppStrings.saveText,
+                            style: TextStyle(
+                              color: Appcolors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-

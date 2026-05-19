@@ -1,126 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/pages/choose_option.dart';
 import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
-import 'package:flutter/material.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
 
   @override
   State<Loginscreen> createState() => _LoginscreenState();
+}
 
-  }
+class _LoginscreenState extends State<Loginscreen> {
+  final TextEditingController _passwordController = TextEditingController();
 
-  class _LoginscreenState extends State<Loginscreen>{
-    final TextEditingController _passwordController = TextEditingController();
-
-     void checkPassword(BuildContext context, password) {
+  void checkPassword(BuildContext context, password) {
     if (password == 'admin') {
-      Navigator.push(context, 
-      MaterialPageRoute<void>(builder: (context) => const ChooseOption()));
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pogrešna šifra'))
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(builder: (context) => const ChooseOption()),
       );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text(AppStrings.wrongPassword)));
     }
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment(0.8, 1),
-            colors: <Color>[
-              Appcolors.green1,
-              Appcolors.green2,
-              Appcolors.green3,
-              Appcolors.green4,
-            ],
-            tileMode: TileMode.mirror,
-          ),
-        ),
-        child: Center(
-          child: Container(
-            height: 500,
-            width: 500,
-            padding: const EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              color: Appcolors.lightGreen,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Image.asset(
-                  'assets/images/bingo-logo.png',
-                  height: 100,
-                  fit: BoxFit.contain,
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 320,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Appcolors.green1, Appcolors.green2],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-
-                const SizedBox(height: 20),
-
-                const Text(
-                  AppStrings.loginText,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Appcolors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 34,
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  style: const TextStyle(color: Appcolors.white),
-                  decoration: InputDecoration(
-                    labelText: AppStrings.labelTextPassword,
-                    labelStyle: const TextStyle(color: Appcolors.white),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Appcolors.white),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Appcolors.white),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    prefixIcon: const Icon(Icons.lock, color: Appcolors.white),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
-                    onPressed: () => checkPassword(context,_passwordController.text),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Appcolors.green1),
-                    ),
-                    child: const Text(
-                      AppStrings.loginText,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Appcolors.white,
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    bottom: 40,
+                    left: 0,
+                    right: 0,
+                    child: FadeInUp(
+                      duration: const Duration(milliseconds: 1300),
+                      child: const Center(
+                        child: Text(
+                          AppStrings.loginText,
+                          style: TextStyle(
+                            color: Appcolors.white,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: 70,
+                    left: 0,
+                    right: 0,
+                    child: FadeInUp(
+                      duration: const Duration(milliseconds: 1000),
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/bingo-logo.png',
+                          height: 100,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                children: [
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1500),
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Appcolors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Appcolors.green2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Appcolors.green2.withValues(),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: AppStrings.enterPassword,
+                          prefixIcon: Icon(Icons.lock, color: Appcolors.grey),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1700),
+                    child: GestureDetector(
+                      onTap: () =>
+                          checkPassword(context, _passwordController.text),
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [Appcolors.green1, Appcolors.green3],
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            AppStrings.loginText,
+                            style: TextStyle(
+                              color: Appcolors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
