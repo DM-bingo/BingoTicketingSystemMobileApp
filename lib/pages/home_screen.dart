@@ -64,7 +64,7 @@ class _HomeScreen extends State<HomeScreen> {
                   right: 0,
                   child: Center(
                     child: Text(
-                      "Dashboard",
+                      AppStrings.dashbordText,
                       style: TextStyle(
                         color: Appcolors.white,
                         fontSize: 28,
@@ -89,7 +89,7 @@ class _HomeScreen extends State<HomeScreen> {
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.only(bottom: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Appcolors.white,
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
@@ -124,7 +124,7 @@ class _HomeScreen extends State<HomeScreen> {
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.only(bottom: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Appcolors.white,
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
@@ -158,7 +158,7 @@ class _HomeScreen extends State<HomeScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Appcolors.white,
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(

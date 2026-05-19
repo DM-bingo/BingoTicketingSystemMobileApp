@@ -259,7 +259,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       DropdownButtonFormField<String>(
                         initialValue: _selectedService,
                         decoration: InputDecoration(
-                          labelText: 'Tip Servisa',
+                          labelText: AppStrings.serviceType,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -318,7 +318,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
+                        border: Border.all(color: Appcolors.grey),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -329,7 +329,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                               maxLines: null,
                               expands: true,
                               decoration: const InputDecoration(
-                                hintText: 'Unesite opis zahtjeva...',
+                                hintText: AppStrings.enterDescription,
                                 border: InputBorder.none,
                               ),
                             ),
@@ -366,8 +366,8 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                                             },
                                             child: const CircleAvatar(
                                               radius: 10,
-                                              backgroundColor: Colors.red,
-                                              child: Icon(Icons.close, size: 12, color: Colors.white),
+                                              backgroundColor: Appcolors.red,
+                                              child: Icon(Icons.close, size: 12, color: Appcolors.white),
                                             ),
                                           ),
                                         ),
@@ -402,7 +402,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           ),
                         ),
                         child: Material(
-                          color: Colors.transparent,
+                          color: Appcolors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: podnesiZahtjev,
