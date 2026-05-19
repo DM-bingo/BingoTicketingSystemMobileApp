@@ -23,7 +23,7 @@ class _LoginscreenState extends State<Loginscreen> {
     } else {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Pogrešna šifra')));
+      ).showSnackBar(const SnackBar(content: Text(AppStrings.wrongPassword)));
     }
   }
 
@@ -59,9 +59,9 @@ class _LoginscreenState extends State<Loginscreen> {
                       duration: const Duration(milliseconds: 1300),
                       child: const Center(
                         child: Text(
-                          "Login",
+                          AppStrings.loginText,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Appcolors.white,
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
                           ),
@@ -95,12 +95,12 @@ class _LoginscreenState extends State<Loginscreen> {
                     child: Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Appcolors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Appcolors.green2),
                         boxShadow: [
                           BoxShadow(
-                            color: Appcolors.green2.withOpacity(0.2),
+                            color: Appcolors.green2.withValues(),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -111,8 +111,8 @@ class _LoginscreenState extends State<Loginscreen> {
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Enter password",
-                          prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                          hintText: AppStrings.enterPassword,
+                          prefixIcon: Icon(Icons.lock, color: Appcolors.grey),
                         ),
                       ),
                     ),
@@ -137,7 +137,7 @@ class _LoginscreenState extends State<Loginscreen> {
                           child: Text(
                             AppStrings.loginText,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Appcolors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

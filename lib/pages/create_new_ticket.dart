@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+
 class CreateNewTicket extends StatefulWidget {
   const CreateNewTicket({super.key});
 
@@ -97,9 +97,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   final ImagePicker _picker = ImagePicker();
 
   void podnesiZahtjev() {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text(AppStrings.requestSend)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text(AppStrings.requestSend)),
+    );
   }
 
   Future<void> _pickImages() async {
@@ -111,269 +111,321 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     }
   }
 
-  Future<http.Response> deleteAlbum(String id) async{
-    final http.Response reresponse = await http.delete(
+  Future<http.Response> deleteAlbum(String id) async {
+    return await http.delete(
       Uri.parse('url'),
-      headers: <String, String>{
+      headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-      }
+      },
     );
-    return reresponse; 
   }
 
   @override
   Widget build(BuildContext context) {
     List<String> level2Options = _subServiceData[_selectedService] ?? [];
-
-    List<String> level3Options =
-        _subServiceData[_selectedSubOptionLevel2] ?? [];
+    List<String> level3Options = _subServiceData[_selectedSubOptionLevel2] ?? [];
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment(0.8, 1),
-            colors: <Color>[
-              Appcolors.green1,
-              Appcolors.green2,
-              Appcolors.green3,
-              Appcolors.green4,
-            ],
-            tileMode: TileMode.mirror,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              width: 600,
-              padding: const EdgeInsets.all(24.0),
-              decoration: BoxDecoration(
-                color: Appcolors.white,
-                borderRadius: BorderRadius.circular(10),
+      body: Column(
+        children: [
+          Container(
+            height: 260,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Appcolors.green1,
+                  Appcolors.green2,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DropdownButtonFormField<String>(
-                    menuMaxHeight: 300,
-                    decoration: InputDecoration(
-                      labelText: AppStrings.requestType,
-                      border: OutlineInputBorder(),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 70,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/bingo-logo.png',
+                      height: 80,
                     ),
-                    initialValue: options[0],
-                    items: options
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                        .toList(),
-                    onChanged: (v) => setState(() => selectedValue = v),
                   ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    menuMaxHeight: 300,
-                    decoration: InputDecoration(
-                      labelText: AppStrings.objectText,
-                      border: OutlineInputBorder(),
-                    ),
-                    initialValue: options1[0],
-                    items: options1
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                        .toList(),
-                    onChanged: (v) => setState(() => selectedValue1 = v),
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    menuMaxHeight: 300,
-                    decoration: InputDecoration(
-                      labelText: AppStrings.priorityText,
-                      border: OutlineInputBorder(),
-                    ),
-                    initialValue: priorityValues[1],
-                    items: priorityValues
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                        .toList(),
-                    onChanged: (v) => setState(() => priority = v),
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: AppStrings.requestText,
-                      border: OutlineInputBorder(),
-                    ),
-                    initialValue: optionsValue,
-                    items: listOfOptions
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                        .toList(),
-                    onChanged: (v) {
-                      setState(() {
-                        optionsValue = v;
-                        _selectedService = null;
-                        _selectedSubOptionLevel2 = null;
-                        _selectedSubOptionLevel3 = null;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  if (optionsValue == 'SERVIS') ...[
-                    DropdownButtonFormField<String>(
-                      menuMaxHeight: 300,
-                      decoration: const InputDecoration(
-                        labelText: 'Tip Servisa',
-                        border: OutlineInputBorder(),
+                ),
+                const Positioned(
+                  bottom: 25,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Text(
+                      AppStrings.createTicket,
+                      style: TextStyle(
+                        color: Appcolors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
                       ),
-                      initialValue: _selectedService,
-                      items: listOfServiceOptions
-                          .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e)),
-                          )
-                          .toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Appcolors.green2.withValues(),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedValue ?? options.first,
+                      decoration: InputDecoration(
+                        labelText: AppStrings.requestType,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: options.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      onChanged: (v) => setState(() => selectedValue = v),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    DropdownButtonFormField<String>(
+                        initialValue: selectedValue1 ?? options1.first,
+                      decoration: InputDecoration(
+                        labelText: AppStrings.objectText,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: options1.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      onChanged: (v) => setState(() => selectedValue1 = v),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    DropdownButtonFormField<String>(
+                      initialValue: priority ?? priorityValues[1],
+                      decoration: InputDecoration(
+                        labelText: AppStrings.priorityText,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: priorityValues.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      onChanged: (v) => setState(() => priority = v),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    DropdownButtonFormField<String>(
+                      initialValue: optionsValue,
+                      decoration: InputDecoration(
+                        labelText: AppStrings.requestText,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: listOfOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) {
                         setState(() {
-                          _selectedService = v;
+                          optionsValue = v;
+                          _selectedService = null;
                           _selectedSubOptionLevel2 = null;
                           _selectedSubOptionLevel3 = null;
                         });
                       },
                     ),
-                    const SizedBox(height: 20),
-                  ],
-                  if (level2Options.isNotEmpty) ...[
-                    DropdownButtonFormField<String>(
-                      menuMaxHeight: 300,
-                      decoration: InputDecoration(
-                        labelText: AppStrings.chooseOption1,
-                        border: OutlineInputBorder(),
-                      ),
-                      initialValue: _selectedSubOptionLevel2,
-                      items: level2Options
-                          .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e)),
-                          )
-                          .toList(),
-                      onChanged: (v) {
-                        setState(() {
-                          _selectedSubOptionLevel2 = v;
-                          _selectedSubOptionLevel3 = null;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                  if (level3Options.isNotEmpty) ...[
-                    DropdownButtonFormField<String>(
-                      menuMaxHeight: 300,
-                      decoration: InputDecoration(
-                        labelText: AppStrings.chooseOption1,
-                        border: OutlineInputBorder(),
-                      ),
-                      initialValue: _selectedSubOptionLevel3,
-                      items: level3Options
-                          .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e)),
-                          )
-                          .toList(),
-                      onChanged: (v) {
-                        setState(() {
-                          _selectedSubOptionLevel3 = v;
-                        });
-                      },
-                    ),
-                  ],
-                  const SizedBox(height: 20),
-                  Container(
-                    width: 600,
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 150,
-                          child: TextField(
-                            maxLines: null,
-                            expands: true,
-                            decoration: InputDecoration(
-                              hintText: 'Unesite opis zahtjeva...',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        const Divider(),
-                        if (_selectedImages.isNotEmpty)
-                          SizedBox(
-                            height: 80,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _selectedImages.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Stack(
-                                    children: [
-                                      Image.file(
-                                        File(_selectedImages[index].path),
-                                        width: 80,
-                                        height: 80,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        right: 0,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              _selectedImages.removeAt(index);
-                                            });
-                                          },
-                                          child: const CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.red,
-                                            child: Icon(
-                                              Icons.close,
-                                              size: 12,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        TextButton.icon(
-                          onPressed: _pickImages,
-                          icon: const Icon(Icons.add_a_photo),
-                          label: const Text(AppStrings.pictureText),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 300,
-                      height: 40,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
+
+                    const SizedBox(height: 15),
+
+                    if (optionsValue == 'SERVIS')
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedService,
+                        decoration: InputDecoration(
+                          labelText: 'Tip Servisa',
+                          border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () => podnesiZahtjev(),
-                        child: Text(AppStrings.requestSend2),
+                        items: listOfServiceOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        onChanged: (v) {
+                          setState(() {
+                            _selectedService = v;
+                            _selectedSubOptionLevel2 = null;
+                            _selectedSubOptionLevel3 = null;
+                          });
+                        },
+                      ),
+
+                    const SizedBox(height: 15),
+
+                    if (level2Options.isNotEmpty)
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedSubOptionLevel2,
+                        decoration: InputDecoration(
+                          labelText: AppStrings.chooseOption1,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        items: level2Options.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        onChanged: (v) {
+                          setState(() {
+                            _selectedSubOptionLevel2 = v;
+                            _selectedSubOptionLevel3 = null;
+                          });
+                        },
+                      ),
+
+                    const SizedBox(height: 15),
+
+                    if (level3Options.isNotEmpty)
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedSubOptionLevel3,
+                        decoration: InputDecoration(
+                          labelText: AppStrings.chooseOption1,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        items: level3Options.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        onChanged: (v) {
+                          setState(() {
+                            _selectedSubOptionLevel3 = v;
+                          });
+                        },
+                      ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 120,
+                            child: TextField(
+                              maxLines: null,
+                              expands: true,
+                              decoration: const InputDecoration(
+                                hintText: 'Unesite opis zahtjeva...',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                          if (_selectedImages.isNotEmpty)
+                            SizedBox(
+                              height: 80,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _selectedImages.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Stack(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Image.file(
+                                            File(_selectedImages[index].path),
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _selectedImages.removeAt(index);
+                                              });
+                                            },
+                                            child: const CircleAvatar(
+                                              radius: 10,
+                                              backgroundColor: Colors.red,
+                                              child: Icon(Icons.close, size: 12, color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          TextButton.icon(
+                            onPressed: _pickImages,
+                            icon: const Icon(Icons.add_a_photo),
+                            label: const Text(AppStrings.pictureText),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: 25),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Appcolors.green1,
+                              Appcolors.green3,
+                            ],
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: podnesiZahtjev,
+                            child: const Center(
+                              child: Text(
+                                AppStrings.requestSend2,
+                                style: TextStyle(
+                                  color: Appcolors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
