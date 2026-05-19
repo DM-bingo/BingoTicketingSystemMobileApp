@@ -1,5 +1,6 @@
 import 'package:bingo_ticketing_system_mobile/colors/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/pages/details_for_tickets.dart';
+import 'package:bingo_ticketing_system_mobile/strings/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class ViewExistingTickets extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                   right: 0,
                   child: Center(
                     child: Text(
-                      "Tickets",
+                      AppStrings.tickets,
                       style: TextStyle(
                         color: Appcolors.white,
                         fontSize: 26,
@@ -74,7 +75,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                     margin: const EdgeInsets.only(bottom: 20),
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Appcolors.white,
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
