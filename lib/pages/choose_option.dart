@@ -58,7 +58,7 @@ class _ChooseOption extends State<ChooseOption> {
                       child: Text(
                         AppStrings.chooseOption,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Appcolors.white,
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
@@ -74,7 +74,7 @@ class _ChooseOption extends State<ChooseOption> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Appcolors.white,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
