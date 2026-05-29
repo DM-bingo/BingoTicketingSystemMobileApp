@@ -27,6 +27,8 @@ final controller = AuthController(
 void login(BuildContext context) async {
   bool success = await controller.login(_passwordController.text);
 
+  if (!context.mounted) return;
+
   if (success) {
     Navigator.push(
       context,
@@ -38,7 +40,6 @@ void login(BuildContext context) async {
     );
   }
 }
-
 
   @override
   void dispose() {
@@ -120,6 +121,7 @@ void login(BuildContext context) async {
                         ],
                       ),
                       child: TextField(
+                        keyboardType: TextInputType.number,
                         controller: _passwordController,
                         obscureText: true,
                         decoration: const InputDecoration(

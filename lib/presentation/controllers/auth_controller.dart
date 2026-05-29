@@ -8,6 +8,10 @@ class AuthController {
 
   AuthController(this.repository, this.storage);
 
+  Future<void> logout() async{
+    await storage.logout();
+  }
+
   Future<bool> login(String otp) async {
     final result = await repository.login(otp);
 
