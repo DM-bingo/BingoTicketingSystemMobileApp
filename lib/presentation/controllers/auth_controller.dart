@@ -1,4 +1,5 @@
 import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
+
 import '../../domain/repositories/auth_repository.dart';
 
 class AuthController {
@@ -15,6 +16,9 @@ class AuthController {
         result['accessToken'],
         result['refreshToken'],
       );
+
+           await storage.saveUsername (result['username'] ?? "mobileUser");
+
       return true;
     }
     return false;

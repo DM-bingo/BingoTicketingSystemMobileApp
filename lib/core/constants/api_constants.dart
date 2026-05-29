@@ -1,3 +1,4 @@
 class ApiConstants {
- static const baseUrl = "https://localhost:7115/api/Auth/activate-user";
+  static const loginUrl = "http://172.23.207.83:5001/api/Auth/activate-user";
+ 
 }
