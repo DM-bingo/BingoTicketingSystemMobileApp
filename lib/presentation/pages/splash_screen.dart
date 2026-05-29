@@ -1,3 +1,5 @@
+import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/home_screen.dart';
 import 'package:bingo_ticketing_system_mobile/presentation/pages/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -19,21 +21,30 @@ class _SplashScreenState extends State<SplashScreen>
     _controller = AnimationController(vsync: this);
   }
 
-  Future<void> _handleNavigation(LottieComposition composition) async {
-    _controller.duration = composition.duration;
-    _controller.forward();
+Future<void> _handleNavigation(LottieComposition composition) async {
+  _controller.duration = composition.duration;
+  await _controller.forward();
 
-    final minimumDelay = Future.delayed(const Duration(seconds: 2));
+  final minimumDelay = Future.delayed(const Duration(seconds: 2));
+  await minimumDelay;
 
-    await _controller.forward().then((_) => null);
+  final storage = AuthStorage();
+  final token = await storage.getAccessToken();
 
-    await minimumDelay;
+  if (!mounted) return;
 
-    if (!mounted) return;
+  if (token != null && token.isNotEmpty) {
+   
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const Loginscreen()),
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  } else {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const Loginscreen()),
     );
   }
+}
+
 
   @override
   void dispose() {

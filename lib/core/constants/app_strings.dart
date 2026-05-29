@@ -8,7 +8,6 @@ class AppStrings {
   static const String serviceType = 'Tip servisa';
   static const String enterDescription = 'Unesite opis zahtjeva...';
   static const String tickets = 'Tickets';
-
   static const String loginScreen = 'LoginScreen';
   static const String labelTextPassword = 'Password';
   static const String chooseOption = 'Izaberite opciju';
