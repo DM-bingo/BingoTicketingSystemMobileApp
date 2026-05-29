@@ -1,23 +1,25 @@
 import 'dart:convert';
+import 'package:bingo_ticketing_system_mobile/core/constants/api_constants.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 
 class AuthService {
-  
-    Future<Map<String, dynamic>?> activateUser(String otp) async {
-  final response = await http.post(
-    Uri.parse("http://172.23.207.81:5000/api/Auth/activate-user"),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      "activationCode": otp,
-    }),
-  );
+  Future<Map<String, dynamic>?> activateUser(String otp) async {
+    final response = await http.post(
+      Uri.parse(ApiConstants.loginUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        "activationCode": otp, 
+      }),
+    );
 
-  if (response.statusCode == 200) {
-    return jsonDecode(response.body);
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
+    return null;
   }
-  return null;
 }
-  
-}
-

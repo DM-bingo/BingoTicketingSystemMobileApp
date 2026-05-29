@@ -25,23 +25,16 @@ final controller = AuthController(
 );
 
 void login(BuildContext context) async {
-  debugPrint("LOGIN CLICKED");
-
   bool success = await controller.login(_passwordController.text);
 
-  debugPrint("SUCCESS: $success");
-
   if (success) {
-    debugPrint("NAVIGATING...");
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const HomeScreen()),
     );
   } else {
-    debugPrint("FAILED LOGIN");
-
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Invalid OTP")),
+      const SnackBar(content: Text("Aktivacijski kod nije validan")),
     );
   }
 }
