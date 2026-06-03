@@ -19,9 +19,10 @@ class AuthController {
       await storage.saveTokens(
         result['accessToken'],
         result['refreshToken'],
+      
       );
 
-           await storage.saveUsername (result['username'] ?? "mobileUser");
+           await storage.saveUsername (result['username']);
 
       return true;
     }
