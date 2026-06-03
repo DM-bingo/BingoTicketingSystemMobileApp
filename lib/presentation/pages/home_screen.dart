@@ -68,7 +68,7 @@ class _HomeScreen extends State<HomeScreen> {
                   right: 0,
                   child: Center(
                     child: Text(
-                      AppStrings.dashbordText,
+                      AppStrings.dashboard,
                       style: TextStyle(
                         color: Appcolors.white,
                         fontSize: 28,
@@ -189,7 +189,7 @@ class _HomeScreen extends State<HomeScreen> {
                           SizedBox(width: 20),
                           Expanded(
                             child: Text(
-                              AppStrings.settingsText,
+                              AppStrings.settings,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
