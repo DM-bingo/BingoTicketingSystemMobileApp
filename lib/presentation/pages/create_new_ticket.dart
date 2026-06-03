@@ -170,7 +170,19 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           .map(
                             (p) => DropdownMenuItem(
                               value: p.value,
-                              child: Text(p.label),
+                              child: Text(
+                                p.label,
+                                style: TextStyle(
+                                  color: p.label.toLowerCase() == "nizak"
+                                      ? Appcolors.nizak
+                                      : p.label.toLowerCase() == 'srednji'
+                                      ? Appcolors.srednji
+                                      : p.label.toLowerCase() == 'visok'
+                                      ? Appcolors.visok
+                                      : Appcolors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           )
                           .toList(),
@@ -290,7 +302,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         },
                       ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
                     const TextField(
                       maxLines: 4,

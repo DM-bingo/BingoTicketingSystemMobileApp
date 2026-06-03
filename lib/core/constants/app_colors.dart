@@ -15,10 +15,14 @@ class Appcolors {
   static const Color black = Color.fromRGBO(0, 0, 0, 1);
 
                       //Za gradient pozadinu
-  
   static const Color green1 = Color.fromRGBO(0, 245, 73, 1);
   static const Color green2 = Color.fromRGBO(9, 172, 58, 1);
   static const Color green3 = Color.fromRGBO(6, 58, 4, 1);
   static const Color green4 = Color.fromRGBO(13, 27, 1, 1);
+
+                    //Prioriteti
+  static const Color nizak = Color.fromRGBO(17, 161, 60, 1);
+  static const Color srednji = Color.fromRGBO(194, 165, 2, 1);
+  static const Color visok = Color.fromRGBO(250, 0, 0, 1);
 }
 
