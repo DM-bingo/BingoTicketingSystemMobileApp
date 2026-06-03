@@ -47,6 +47,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   void initState() {
     super.initState();
     fetchCategories();
+    fetchUsername();
   }
 
   Future<void> fetchUsername() async {
@@ -157,6 +158,31 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
                     const SizedBox(height: 15),
 
+                      DropdownButtonFormField<int>(
+                      initialValue: selectedPriority,
+                      decoration: InputDecoration(
+                        labelText: "Prioritet",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: priorities
+                          .map(
+                            (p) => DropdownMenuItem(
+                              value: p.value,
+                              child: Text(p.label),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (v) {
+                        setState(() {
+                          selectedPriority = v;
+                        });
+                      },
+                    ),
+
+                    const SizedBox(height: 15),
+
                     DropdownButtonFormField<String>(
                       initialValue: selectedLevel1,
                       decoration: InputDecoration(
@@ -183,7 +209,8 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       },
                     ),
 
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 15,),
+                    
 
                     if (level2.isNotEmpty)
                       DropdownButtonFormField<String>(
@@ -263,31 +290,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           });
                         },
                       ),
-
-                    const SizedBox(height: 15),
-
-                    DropdownButtonFormField<int>(
-                      initialValue: selectedPriority,
-                      decoration: InputDecoration(
-                        labelText: "Prioritet",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      items: priorities
-                          .map(
-                            (p) => DropdownMenuItem(
-                              value: p.value,
-                              child: Text(p.label),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) {
-                        setState(() {
-                          selectedPriority = v;
-                        });
-                      },
-                    ),
 
                     const SizedBox(height: 20),
 
