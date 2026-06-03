@@ -145,20 +145,20 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                   children: [
                     TextFormField(
                       initialValue: username ?? "",
-                      readOnly: true, 
+                      readOnly: true,
                       decoration: InputDecoration(
                         labelText: "Korisnik",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        filled: true, 
+                        filled: true,
                         fillColor: Colors.grey.shade200,
                       ),
                     ),
 
                     const SizedBox(height: 15),
 
-                      DropdownButtonFormField<int>(
+                    DropdownButtonFormField<int>(
                       initialValue: selectedPriority,
                       decoration: InputDecoration(
                         labelText: "Prioritet",
@@ -209,8 +209,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       },
                     ),
 
-                    const SizedBox(height: 15,),
-                    
+                    const SizedBox(height: 15),
 
                     if (level2.isNotEmpty)
                       DropdownButtonFormField<String>(
@@ -306,7 +305,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                     TextButton.icon(
                       onPressed: _pickImages,
                       icon: const Icon(Icons.add_a_photo),
-                      label: const Text("Dodaj slike"),
+                      label: const Text(AppStrings.images),
                     ),
 
                     if (_selectedImages.isNotEmpty)
@@ -330,10 +329,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
                     const SizedBox(height: 20),
 
-                    /// ✅ SUBMIT
                     ElevatedButton(
                       onPressed: podnesiZahtjev,
-                      child: const Text("Pošalji"),
+                      child: const Text(AppStrings.send),
                     ),
                   ],
                 ),

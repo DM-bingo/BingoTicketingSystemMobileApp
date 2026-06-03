@@ -50,7 +50,7 @@ void login(BuildContext context) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Appcolors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -73,7 +73,7 @@ void login(BuildContext context) async {
                       duration: const Duration(milliseconds: 1300),
                       child: const Center(
                         child: Text(
-                          AppStrings.loginText,
+                          AppStrings.login,
                           style: TextStyle(
                             color: Appcolors.white,
                             fontSize: 36,
@@ -126,7 +126,7 @@ void login(BuildContext context) async {
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: AppStrings.enterPassword,
+                          hintText: AppStrings.enterPW,
                           prefixIcon: Icon(Icons.lock, color: Appcolors.grey),
                         ),
                       ),
@@ -150,7 +150,7 @@ void login(BuildContext context) async {
                         ),
                         child: const Center(
                           child: Text(
-                            AppStrings.loginText,
+                            AppStrings.login,
                             style: TextStyle(
                               color: Appcolors.white,
                               fontWeight: FontWeight.bold,
