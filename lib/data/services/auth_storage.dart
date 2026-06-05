@@ -23,4 +23,13 @@ class AuthStorage {
   Future<void> logout() async {
     await _storage.deleteAll();
   }
+
+  Future<void> saveUserId(int id) async {
+    await _storage.write(key: 'userId', value: id.toString());
+  }
+
+  Future<int?> getUserId() async {
+    final id = await _storage.read(key: 'userId');
+    return id != null ? int.parse(id) : null;
+  }
 }

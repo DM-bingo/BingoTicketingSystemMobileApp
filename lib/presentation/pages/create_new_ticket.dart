@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/storage/secure_storage.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/category_service.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/category_model.dart';
-
+import 'package:http/http.dart' as http;
 class PriorityItem {
   final String label;
   final int value;
@@ -42,6 +44,8 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
   final List<XFile> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
+
+  
 
   @override
   void initState() {
@@ -95,6 +99,56 @@ class _CreateNewTicket extends State<CreateNewTicket> {
         _selectedImages.addAll(images);
       });
     }
+  }
+
+  Future<String?> convertImageToBase64() async {
+    if (_selectedImages.isEmpty) return null;
+
+    final bytes = await _selectedImages.first.readAsBytes();
+    return base64Encode(bytes);
+  }
+
+  
+
+  Future<void> createTicket() async {
+    final token = await AuthStorage().getAccessToken();
+    final userId = await AuthStorage().getUserId();
+
+    final base64Image = await convertImageToBase64();
+
+    final categoryId = int.parse(
+      selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1!,
+    );
+
+    final body = {
+      "createdByUserId": userId,
+      "categoryId": categoryId,
+      "title": "Test ticket",
+      "description": "Opis problema",
+      "priority": selectedPriority,
+      "photoBase64": base64Image,
+    };
+
+     final response = await http.post(
+    Uri.parse("http://172.23.207.83:5000/api/Tickets/new"),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode(body),
+  );
+
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
+
+    
+
+     if (response.statusCode == 200) {
+     ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Tiket kreiran")),
+    );
+  }
+
   }
 
   @override
@@ -342,7 +396,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                     const SizedBox(height: 20),
 
                     ElevatedButton(
-                      onPressed: podnesiZahtjev,
+                      onPressed: createTicket,
                       child: const Text(AppStrings.send),
                     ),
                   ],

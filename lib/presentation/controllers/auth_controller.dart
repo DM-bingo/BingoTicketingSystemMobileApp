@@ -23,6 +23,7 @@ class AuthController {
       );
 
            await storage.saveUsername (result['username']);
+           await storage.saveUserId(result['userId']);
 
       return true;
     }
