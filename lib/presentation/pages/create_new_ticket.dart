@@ -47,7 +47,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
   final CreateNewTicketService _ticketService = CreateNewTicketService();
 
-  
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -95,53 +95,72 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   }
 
   Future<void> _pickImages() async {
-    final List<XFile> images = await _picker.pickMultiImage();
-    if (images.isNotEmpty) {
+    final picked = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+
+    if (picked != null) {
       setState(() {
-        _selectedImages.addAll(images);
+        _selectedImages.clear();
+        _selectedImages.add(picked);
       });
     }
   }
 
-  Future<String?> convertImageToBase64() async {
-    if (_selectedImages.isEmpty) return null;
+  String getSelectedCategoryName() {
+    final id =
+        selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1;
 
-    final bytes = await _selectedImages.first.readAsBytes();
-    return base64Encode(bytes);
+    final category = _categories.firstWhere((c) => c.id.toString() == id);
+
+    return category.name;
   }
 
-  
+  Future<String?> convertImageToBase64() async {
+    try {
+      if (_selectedImages.isEmpty) return null;
+
+      final file = File(_selectedImages.first.path);
+
+      final bytes = await file.readAsBytes();
+
+      return base64Encode(bytes);
+    } catch (e) {
+      debugPrint("IMAGE ERROR: $e");
+      return null;
+    }
+  }
 
   Future<void> createTicket() async {
-  final base64Image = await convertImageToBase64();
+    debugPrint('Kreiraj se majkuuu ti');
+    final base64Image = await convertImageToBase64();
+    debugPrint('BASE RADIIII ALO');
 
-  final categoryId = int.parse(
-    selectedLevel4 ??
-    selectedLevel3 ??
-    selectedLevel2 ??
-    selectedLevel1!,
-  );
-
-  final success = await _ticketService.createTicket(
-    categoryId: categoryId,
-    priority: selectedPriority!,
-    title: "Test ticket",
-    description: "Opis problema",
-    photoBase64: base64Image,
-  );
-
-  if(!mounted) return;
-
-  if (success) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Tiket kreiran")),
+    final categoryId = int.parse(
+      selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1!,
     );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Greška pri kreiranju")),
+
+    final success = await _ticketService.createTicket(
+      categoryId: categoryId,
+      priority: selectedPriority!,
+      title: getSelectedCategoryName(),
+      description: _descriptionController.text,
+      photoBase64: base64Image,
     );
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Tiket kreiran")));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Greška pri kreiranju")));
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -350,9 +369,10 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
                     const SizedBox(height: 10),
 
-                    const TextField(
+                    TextField(
+                      controller: _descriptionController,
                       maxLines: 4,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Opis...",
                         border: OutlineInputBorder(),
                       ),
