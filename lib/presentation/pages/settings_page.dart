@@ -34,10 +34,7 @@ class _SettingsPage extends State<SettingsPage> {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await controller.logout();
-
               if(!context.mounted) return;
-
-
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (_) => const Loginscreen()),

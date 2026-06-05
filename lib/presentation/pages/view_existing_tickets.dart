@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/ticket_model.dart';
-import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/view_existing_tickets_service.dart';
 import 'package:bingo_ticketing_system_mobile/presentation/pages/details_for_tickets.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class ViewExistingTickets extends StatefulWidget {
   const ViewExistingTickets({super.key});
@@ -17,6 +15,7 @@ class ViewExistingTickets extends StatefulWidget {
 class _ViewExistingTickets extends State<ViewExistingTickets> {
   List<TicketModel> tickets = [];
   bool isLoading = true;
+  final _service = ViewExistingTicketsService();
 
   @override
   void initState() {
@@ -25,35 +24,21 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
   }
 
   Future<void> fetchTickets() async {
-    final token = await AuthStorage().getAccessToken();
-    final userId = await AuthStorage().getUserId();
-
-    final response = await http.get(
-      Uri.parse("http://172.23.207.83:5000/api/Tickets/my-tickets?userId=$userId"),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    debugPrint("STATUS: ${response.statusCode}");
-    debugPrint("BODY: ${response.body}");
-
-    if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
-
+    try {
+      final result = await _service.fetchTickets();
       setState(() {
-        tickets = data.map((e) => TicketModel.fromJson(e)).toList();
+        tickets = result;
         isLoading = false;
       });
+    } catch (e) {
+      debugPrint("ERROR: $e");
     }
   }
 
   void openDetails(TicketModel ticket) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => DetailsForTickets(ticket: ticket),
-      ),
+      MaterialPageRoute(builder: (_) => DetailsForTickets(ticket: ticket)),
     );
   }
 
@@ -132,7 +117,6 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -146,8 +130,9 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: Appcolors.green1,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                         child: Text(
                                           t.categoryName,
@@ -165,13 +150,13 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: Colors.grey.shade200,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                         child: Text(
                                           t.id.toString(),
-                                          style:
-                                              const TextStyle(fontSize: 12),
+                                          style: const TextStyle(fontSize: 12),
                                         ),
                                       ),
                                     ],
@@ -183,8 +168,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                     ),
                                     decoration: BoxDecoration(
                                       color: const Color(0xFFFFF3D6),
-                                      borderRadius:
-                                          BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
                                       t.status,
@@ -212,8 +196,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
 
                               Text(
                                 t.description,
-                                style:
-                                    const TextStyle(color: Colors.black54),
+                                style: const TextStyle(color: Colors.black54),
                               ),
 
                               const SizedBox(height: 15),
@@ -262,8 +245,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                         vertical: 6,
                                       ),
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                         gradient: const LinearGradient(
                                           colors: [
                                             Appcolors.green1,
