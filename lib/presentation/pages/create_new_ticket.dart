@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/storage/secure_storage.dart';
-import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/category_service.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/create_new_ticket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/category_model.dart';
-import 'package:http/http.dart' as http;
+
 class PriorityItem {
   final String label;
   final int value;
@@ -44,6 +44,8 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
   final List<XFile> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
+
+  final CreateNewTicketService _ticketService = CreateNewTicketService();
 
   
 
@@ -111,45 +113,35 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   
 
   Future<void> createTicket() async {
-    final token = await AuthStorage().getAccessToken();
-    final userId = await AuthStorage().getUserId();
+  final base64Image = await convertImageToBase64();
 
-    final base64Image = await convertImageToBase64();
-
-    final categoryId = int.parse(
-      selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1!,
-    );
-
-    final body = {
-      "createdByUserId": userId,
-      "categoryId": categoryId,
-      "title": "Test ticket",
-      "description": "Opis problema",
-      "priority": selectedPriority,
-      "photoBase64": base64Image,
-    };
-
-     final response = await http.post(
-    Uri.parse("http://172.23.207.83:5000/api/Tickets/new"),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    },
-    body: jsonEncode(body),
+  final categoryId = int.parse(
+    selectedLevel4 ??
+    selectedLevel3 ??
+    selectedLevel2 ??
+    selectedLevel1!,
   );
 
-    debugPrint("STATUS: ${response.statusCode}");
-    debugPrint("BODY: ${response.body}");
+  final success = await _ticketService.createTicket(
+    categoryId: categoryId,
+    priority: selectedPriority!,
+    title: "Test ticket",
+    description: "Opis problema",
+    photoBase64: base64Image,
+  );
 
-    
+  if(!mounted) return;
 
-     if (response.statusCode == 200) {
-     ScaffoldMessenger.of(context).showSnackBar(
+  if (success) {
+    ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Tiket kreiran")),
     );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Greška pri kreiranju")),
+    );
   }
-
-  }
+}
 
   @override
   Widget build(BuildContext context) {
