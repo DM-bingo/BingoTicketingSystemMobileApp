@@ -3,4 +3,5 @@ class ApiConstants {
   static const loginUrl = "$urlLocal/api/Auth/activate-user";
   static const categoriesUrl = "$urlLocal/api/Categories";
   static const createNewTicket ="$urlLocal/api/Tickets/new";
+  static const fetchTickets = "$urlLocal/api/Tickets/my-tickets";
 }

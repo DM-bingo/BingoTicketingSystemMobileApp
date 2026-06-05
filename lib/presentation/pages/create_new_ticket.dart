@@ -154,7 +154,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     if (success) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Tiket kreiran")));
+      ).showSnackBar(const SnackBar(content: Text("Opaa evo tiketa")));
     } else {
       ScaffoldMessenger.of(
         context,
