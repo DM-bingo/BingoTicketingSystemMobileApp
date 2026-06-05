@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
-import 'package:bingo_ticketing_system_mobile/presentation/pages/details_for_tickets.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
+import 'package:bingo_ticketing_system_mobile/data/models/ticket_model.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/details_for_tickets.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ViewExistingTickets extends StatefulWidget {
   const ViewExistingTickets({super.key});
@@ -11,10 +15,45 @@ class ViewExistingTickets extends StatefulWidget {
 }
 
 class _ViewExistingTickets extends State<ViewExistingTickets> {
-  void detailScreen(BuildContext context) {
+  List<TicketModel> tickets = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTickets();
+  }
+
+  Future<void> fetchTickets() async {
+    final token = await AuthStorage().getAccessToken();
+    final userId = await AuthStorage().getUserId();
+
+    final response = await http.get(
+      Uri.parse("http://172.23.207.83:5000/api/Tickets/my-tickets?userId=$userId"),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
+
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
+
+      setState(() {
+        tickets = data.map((e) => TicketModel.fromJson(e)).toList();
+        isLoading = false;
+      });
+    }
+  }
+
+  void openDetails(TicketModel ticket) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const DetailsForTickets()),
+      MaterialPageRoute(
+        builder: (_) => DetailsForTickets(ticket: ticket),
+      ),
     );
   }
 
@@ -66,175 +105,189 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
           ),
 
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                GestureDetector(
-                  onTap: () => detailScreen(context),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: Appcolors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Appcolors.green2.withValues(),
-                          blurRadius: 15,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Appcolors.green1,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Text(
-                                    'IT ODRŽAVANJE',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Text(
-                                    '028',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: tickets.length,
+                    itemBuilder: (context, index) {
+                      final t = tickets[index];
 
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
+                      return GestureDetector(
+                        onTap: () => openDetails(t),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration(
+                            color: Appcolors.white,
+                            borderRadius: BorderRadius.circular(18),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Appcolors.green2.withValues(),
+                                blurRadius: 15,
+                                offset: const Offset(0, 8),
                               ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFF3D6),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'Na čekanju',
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 15),
-
-                        const Text(
-                          'Problem sa printerom',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            ],
                           ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        const Text(
-                          'Printer ne štampa u boji, potrebna popravka',
-                          style: TextStyle(color: Colors.black54),
-                        ),
-
-                        const SizedBox(height: 15),
-
-                        const Divider(),
-
-                        const SizedBox(height: 10),
-
-                        Row(
-                          children: const [
-                            Icon(
-                              Icons.person_outline,
-                              size: 18,
-                              color: Appcolors.green1,
-                            ),
-                            SizedBox(width: 6),
-                            Text('Mirza Šabanović'),
-                            SizedBox(width: 25),
-                            Icon(
-                              Icons.calendar_today,
-                              size: 18,
-                              color: Appcolors.green1,
-                            ),
-                            SizedBox(width: 6),
-                            Text('12.06.2026'),
-                          ],
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              '07.06.2026',
-                              style: TextStyle(color: Colors.black54),
-                            ),
-
-                            GestureDetector(
-                              onTap: () => detailScreen(context),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Appcolors.green1,
-                                      Appcolors.green3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Appcolors.green1,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Text(
+                                          t.categoryName,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Text(
+                                          t.id.toString(),
+                                          style:
+                                              const TextStyle(fontSize: 12),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                ),
-                                child: const Text(
-                                  'Detalji',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFF3D6),
+                                      borderRadius:
+                                          BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      t.status,
+                                      style: const TextStyle(
+                                        color: Colors.orange,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 15),
+
+                              Text(
+                                t.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          ],
+
+                              const SizedBox(height: 8),
+
+                              Text(
+                                t.description,
+                                style:
+                                    const TextStyle(color: Colors.black54),
+                              ),
+
+                              const SizedBox(height: 15),
+
+                              const Divider(),
+
+                              const SizedBox(height: 10),
+
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.person_outline,
+                                    size: 18,
+                                    color: Appcolors.green1,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(t.assignedToUsername),
+                                  const SizedBox(width: 25),
+                                  const Icon(
+                                    Icons.calendar_today,
+                                    size: 18,
+                                    color: Appcolors.green1,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(t.createdAt.substring(0, 10)),
+                                ],
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    t.createdAt.substring(0, 10),
+                                    style: const TextStyle(
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => openDetails(t),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20),
+                                        gradient: const LinearGradient(
+                                          colors: [
+                                            Appcolors.green1,
+                                            Appcolors.green3,
+                                          ],
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Detalji',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

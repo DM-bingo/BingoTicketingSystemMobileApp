@@ -1,22 +1,26 @@
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
+import 'package:bingo_ticketing_system_mobile/data/models/ticket_model.dart';
 import 'package:flutter/material.dart';
 
 class DetailsForTickets extends StatefulWidget {
-  const DetailsForTickets({super.key});
+  final TicketModel ticket;
+
+  const DetailsForTickets({super.key, required this.ticket});
 
   @override
   State<DetailsForTickets> createState() => _DetailsForTickets();
 }
 
 class _DetailsForTickets extends State<DetailsForTickets> {
-  final List<String> images = [
-    'https://cdn.phototourl.com/free/2026-05-18-84885704-d1e2-43be-ad4a-42d7a7e6d828.png',
-    'https://cdn.phototourl.com/free/2026-05-18-84885704-d1e2-43be-ad4a-42d7a7e6d828.png',
-    'https://cdn.phototourl.com/free/2026-05-18-84885704-d1e2-43be-ad4a-42d7a7e6d828.png',
-  ];
+  String getImageUrl() {
+    if (widget.ticket.photoUrl.isEmpty) return "";
+    return "http://172.23.207.83:5000${widget.ticket.photoUrl}";
+  }
 
   @override
   Widget build(BuildContext context) {
+    final ticket = widget.ticket;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -45,6 +49,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -59,9 +64,9 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                               color: Colors.green,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Text(
-                              'IT ODRŽAVANJE',
-                              style: TextStyle(
+                            child: Text(
+                              widget.ticket.categoryName,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
                               ),
@@ -77,9 +82,9 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                               color: Colors.grey.shade300,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Text(
-                              '028',
-                              style: TextStyle(fontSize: 12),
+                            child: Text(
+                              ticket.id.toString(),
+                              style: const TextStyle(fontSize: 12),
                             ),
                           ),
                         ],
@@ -93,78 +98,98 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                           color: const Color(0xFFFFE5B4),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text(
-                          'Na čekanju',
-                          style: TextStyle(color: Colors.orange, fontSize: 12),
+                        child: Text(
+                          ticket.status,
+                          style: const TextStyle(
+                            color: Colors.orange,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 20),
-                  const Text(
-                    'Problem sa printerom',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+
+                  Text(
+                    ticket.title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+
                   const SizedBox(height: 10),
-                  const Text(
-                    'Printer ne štampa u boji, potrebna popravka. Potrebno je provjeriti tonere i izvršiti servis uređaja.',
-                    style: TextStyle(color: Colors.black54),
+
+                  Text(
+                    ticket.description,
+                    style: const TextStyle(color: Colors.black54),
                   ),
+
                   const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 15),
+
                   Row(
-                    children: const [
-                      Icon(Icons.person_outline, size: 18, color: Colors.green),
-                      SizedBox(width: 6),
-                      Text('Odgovorna osoba: '),
+                    children: [
+                      const Icon(Icons.person_outline,
+                          size: 18, color: Colors.green),
+                      const SizedBox(width: 6),
+                      const Text('Odgovorna osoba: '),
                       Text(
-                        'Mirza Šabanović',
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(width: 30),
-                      Icon(Icons.calendar_today, size: 18, color: Colors.green),
-                      SizedBox(width: 6),
-                      Text('Rok: '),
-                      Text(
-                        '12.06.2026',
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        ticket.assignedToUsername,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 10),
-                  const Text(
-                    'Kreirano: 07.05.2026',
-                    style: TextStyle(color: Colors.black54),
+
+                  Row(
+                    children: [
+                      const Icon(Icons.person,
+                          size: 18, color: Colors.green),
+                      const SizedBox(width: 6),
+                      const Text('Kreirao: '),
+                      Text(
+                        ticket.createdByUsername,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    'Kreirano: ${ticket.createdAt}',
+                    style: const TextStyle(color: Colors.black54),
+                  ),
+
                   const SizedBox(height: 20),
-                  const Text(
-                    'Slike',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: images.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              images[index],
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
+
+                  if (ticket.photoUrl.isNotEmpty) ...[
+                    const Text(
+                      'Slika',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 10),
+
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        getImageUrl(),
+                        width: double.infinity,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+
                   const SizedBox(height: 30),
+
                   SizedBox(
                     width: double.infinity,
                     height: 45,

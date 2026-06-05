@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/storage/secure_storage.dart';
-import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/category_service.dart';
+import 'package:bingo_ticketing_system_mobile/data/services/create_new_ticket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/category_model.dart';
-import 'package:http/http.dart' as http;
+
 class PriorityItem {
   final String label;
   final int value;
@@ -45,7 +45,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   final List<XFile> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
 
-  
+  final CreateNewTicketService _ticketService = CreateNewTicketService();
+
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -93,62 +95,71 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   }
 
   Future<void> _pickImages() async {
-    final List<XFile> images = await _picker.pickMultiImage();
-    if (images.isNotEmpty) {
+    final picked = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+
+    if (picked != null) {
       setState(() {
-        _selectedImages.addAll(images);
+        _selectedImages.clear();
+        _selectedImages.add(picked);
       });
     }
   }
 
-  Future<String?> convertImageToBase64() async {
-    if (_selectedImages.isEmpty) return null;
+  String getSelectedCategoryName() {
+    final id =
+        selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1;
 
-    final bytes = await _selectedImages.first.readAsBytes();
-    return base64Encode(bytes);
+    final category = _categories.firstWhere((c) => c.id.toString() == id);
+
+    return category.name;
   }
 
-  
+  Future<String?> convertImageToBase64() async {
+    try {
+      if (_selectedImages.isEmpty) return null;
+
+      final file = File(_selectedImages.first.path);
+
+      final bytes = await file.readAsBytes();
+
+      return base64Encode(bytes);
+    } catch (e) {
+      debugPrint("IMAGE ERROR: $e");
+      return null;
+    }
+  }
 
   Future<void> createTicket() async {
-    final token = await AuthStorage().getAccessToken();
-    final userId = await AuthStorage().getUserId();
-
+    debugPrint('Kreiraj se majkuuu ti');
     final base64Image = await convertImageToBase64();
+    debugPrint('BASE RADIIII ALO');
 
     final categoryId = int.parse(
       selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1!,
     );
 
-    final body = {
-      "createdByUserId": userId,
-      "categoryId": categoryId,
-      "title": "Test ticket",
-      "description": "Opis problema",
-      "priority": selectedPriority,
-      "photoBase64": base64Image,
-    };
-
-     final response = await http.post(
-    Uri.parse("http://172.23.207.83:5000/api/Tickets/new"),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    },
-    body: jsonEncode(body),
-  );
-
-    debugPrint("STATUS: ${response.statusCode}");
-    debugPrint("BODY: ${response.body}");
-
-    
-
-     if (response.statusCode == 200) {
-     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Tiket kreiran")),
+    final success = await _ticketService.createTicket(
+      categoryId: categoryId,
+      priority: selectedPriority!,
+      title: getSelectedCategoryName(),
+      description: _descriptionController.text,
+      photoBase64: base64Image,
     );
-  }
 
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Tiket kreiran")));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Greška pri kreiranju")));
+    }
   }
 
   @override
@@ -358,9 +369,10 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
                     const SizedBox(height: 10),
 
-                    const TextField(
+                    TextField(
+                      controller: _descriptionController,
                       maxLines: 4,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Opis...",
                         border: OutlineInputBorder(),
                       ),
