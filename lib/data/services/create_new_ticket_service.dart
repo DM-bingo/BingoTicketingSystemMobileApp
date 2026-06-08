@@ -11,7 +11,7 @@ class CreateNewTicketService {
     required int priority,
     required String title,
     required String description,
-    String? photoBase64,
+    List<String>? photosBase64,
   }) async {
 
     final token = await AuthStorage().getAccessToken();
@@ -23,7 +23,7 @@ class CreateNewTicketService {
       "title": title,
       "description": description,
       "priority": priority,
-      "photoBase64": photoBase64,
+      "photosBase64": photosBase64,
     };
 
     final response = await http.post(

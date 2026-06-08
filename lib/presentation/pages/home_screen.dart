@@ -1,5 +1,6 @@
 import 'package:bingo_ticketing_system_mobile/presentation/pages/create_new_ticket.dart';
 import 'package:bingo_ticketing_system_mobile/presentation/pages/settings_page.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/ticket_maps_screen.dart';
 import 'package:bingo_ticketing_system_mobile/presentation/pages/view_existing_tickets.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,13 @@ class _HomeScreen extends State<HomeScreen> {
       MaterialPageRoute(builder: (context) => const SettingsPage()),
     );
   }
+
+  void ticketMapScreen(BuildContext context){
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => const TicketsMapScreen())
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +172,48 @@ class _HomeScreen extends State<HomeScreen> {
                     ),
                   ),
 
+                
+
                   GestureDetector(
+                    onTap: () => ticketMapScreen(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                       margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Appcolors.white,
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Appcolors.green2.withValues(),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
+                          )
+                        ]
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.location_city_rounded,
+                            color: Appcolors.green1,
+                            size: 40,
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Text(
+                              AppStrings.googleMaps,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward_ios, size: 18,)
+                        ],
+                      ),
+                    ),
+                  ),
+
+                    GestureDetector(
                     onTap: () => settingScreen(context),
                     child: Container(
                       padding: const EdgeInsets.all(20),
