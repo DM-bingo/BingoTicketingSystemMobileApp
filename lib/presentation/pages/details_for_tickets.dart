@@ -12,14 +12,10 @@ class DetailsForTickets extends StatefulWidget {
 }
 
 class _DetailsForTickets extends State<DetailsForTickets> {
-  String getImageUrl() {
-    if (widget.ticket.photoUrl.isEmpty) return "";
-    return "http://172.23.207.83:5000${widget.ticket.photoUrl}";
-  }
-
   @override
   Widget build(BuildContext context) {
     final ticket = widget.ticket;
+    final images = ticket.images;
 
     return Scaffold(
       body: Container(
@@ -49,7 +45,6 @@ class _DetailsForTickets extends State<DetailsForTickets> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -65,7 +60,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              widget.ticket.categoryName,
+                              ticket.categoryName,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -108,9 +103,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 20),
-
                   Text(
                     ticket.title,
                     style: const TextStyle(
@@ -118,18 +111,14 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   Text(
                     ticket.description,
                     style: const TextStyle(color: Colors.black54),
                   ),
-
                   const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 15),
-
                   Row(
                     children: [
                       const Icon(Icons.person_outline,
@@ -138,13 +127,12 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       const Text('Odgovorna osoba: '),
                       Text(
                         ticket.assignedToUsername,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style:
+                            const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
-
                   Row(
                     children: [
                       const Icon(Icons.person,
@@ -153,43 +141,49 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       const Text('Kreirao: '),
                       Text(
                         ticket.createdByUsername,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style:
+                            const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
-
                   Text(
                     'Kreirano: ${ticket.createdAt}',
                     style: const TextStyle(color: Colors.black54),
                   ),
-
                   const SizedBox(height: 20),
-
-                  if (ticket.photoUrl.isNotEmpty) ...[
+                  if (images.isNotEmpty) ...[
                     const Text(
-                      'Slika',
+                      'Slike',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 10),
-
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        getImageUrl(),
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
+                    SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: images.length,
+                        itemBuilder: (_, i) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                "http://172.23.207.83:5000${images[i].photoUrl}",
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
-
                   const SizedBox(height: 30),
-
                   SizedBox(
                     width: double.infinity,
                     height: 45,

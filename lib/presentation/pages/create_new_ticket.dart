@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/storage/secure_storage.dart';
@@ -8,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/category_model.dart';
-
+import 'dart:convert';
 class PriorityItem {
   final String label;
   final int value;
@@ -33,7 +32,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   String? selectedLevel2;
   String? selectedLevel3;
   String? selectedLevel4;
-
   int? selectedPriority = 1;
 
   final List<PriorityItem> priorities = [
@@ -83,27 +81,13 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     return _categories.where((c) => c.parentId == parentId).toList();
   }
 
-  void podnesiZahtjev() {
-    debugPrint(
-      "Selected category: ${selectedLevel3 ?? selectedLevel2 ?? selectedLevel1}",
-    );
-    debugPrint("Selected priority: $selectedPriority");
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text(AppStrings.requestSend)));
-  }
-
   Future<void> _pickImages() async {
-    final picked = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-    );
+    final picked = await _picker.pickMultiImage(imageQuality: 50);
 
-    if (picked != null) {
+    if (picked.isNotEmpty) {
       setState(() {
         _selectedImages.clear();
-        _selectedImages.add(picked);
+        _selectedImages.addAll(picked);
       });
     }
   }
@@ -117,48 +101,75 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     return category.name;
   }
 
-  Future<String?> convertImageToBase64() async {
-    try {
-      if (_selectedImages.isEmpty) return null;
+  Future<List<String>> convertImagesToBase64() async {
+    List<String> base64Images = [];
 
-      final file = File(_selectedImages.first.path);
-
-      final bytes = await file.readAsBytes();
-
-      return base64Encode(bytes);
-    } catch (e) {
-      debugPrint("IMAGE ERROR: $e");
-      return null;
+    for (var img in _selectedImages) {
+      try {
+        final file = File(img.path);
+        final bytes = await file.readAsBytes();
+        base64Images.add(base64Encode(bytes));
+      } catch (e) {
+        debugPrint("ERROR IMAGE: $e");
+      }
     }
+
+    return base64Images;
   }
 
   Future<void> createTicket() async {
-    debugPrint('Kreiraj se majkuuu ti');
-    final base64Image = await convertImageToBase64();
-    debugPrint('BASE RADIIII ALO');
+    final selectedId =
+        selectedLevel4 ??
+        selectedLevel3 ??
+        selectedLevel2 ??
+        selectedLevel1;
 
-    final categoryId = int.parse(
-      selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1!,
-    );
+    if (selectedId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Odaberi kategoriju")),
+      );
+      return;
+    }
+
+    if (_descriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Unesi opis")),
+      );
+      return;
+    }
+
+    final base64Images = await convertImagesToBase64();
+
+    final categoryId = int.parse(selectedId);
 
     final success = await _ticketService.createTicket(
       categoryId: categoryId,
       priority: selectedPriority!,
       title: getSelectedCategoryName(),
       description: _descriptionController.text,
-      photoBase64: base64Image,
+      photosBase64: base64Images,
     );
 
     if (!mounted) return;
 
     if (success) {
+      _descriptionController.clear();
+      setState(() {
+        _selectedImages.clear();
+        selectedLevel1 = null;
+        selectedLevel2 = null;
+        selectedLevel3 = null;
+        selectedLevel4 = null;
+      });
+
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Opaa evo tiketa")));
+      ).showSnackBar(const SnackBar(content: Text("Tiket kreiran")));
     } else {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Greška pri kreiranju")));
+      ).showSnackBar(
+          const SnackBar(content: Text("Greška pri kreiranju")));
     }
   }
 
@@ -203,7 +214,6 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -220,9 +230,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         fillColor: Colors.grey.shade200,
                       ),
                     ),
-
                     const SizedBox(height: 15),
-
                     DropdownButtonFormField<int>(
                       initialValue: selectedPriority,
                       decoration: InputDecoration(
@@ -241,10 +249,10 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                                   color: p.label.toLowerCase() == "nizak"
                                       ? Appcolors.nizak
                                       : p.label.toLowerCase() == 'srednji'
-                                      ? Appcolors.srednji
-                                      : p.label.toLowerCase() == 'visok'
-                                      ? Appcolors.visok
-                                      : Appcolors.black,
+                                          ? Appcolors.srednji
+                                          : p.label.toLowerCase() == 'visok'
+                                              ? Appcolors.visok
+                                              : Appcolors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -257,9 +265,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         });
                       },
                     ),
-
                     const SizedBox(height: 15),
-
                     DropdownButtonFormField<String>(
                       initialValue: selectedLevel1,
                       decoration: InputDecoration(
@@ -285,9 +291,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         });
                       },
                     ),
-
                     const SizedBox(height: 15),
-
                     if (level2.isNotEmpty)
                       DropdownButtonFormField<String>(
                         initialValue: selectedLevel2,
@@ -313,9 +317,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           });
                         },
                       ),
-
                     const SizedBox(height: 15),
-
                     if (level3.isNotEmpty)
                       DropdownButtonFormField<String>(
                         initialValue: selectedLevel3,
@@ -340,9 +342,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           });
                         },
                       ),
-
                     const SizedBox(height: 15),
-
                     if (level4.isNotEmpty)
                       DropdownButtonFormField<String>(
                         initialValue: selectedLevel4,
@@ -366,9 +366,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           });
                         },
                       ),
-
                     const SizedBox(height: 10),
-
                     TextField(
                       controller: _descriptionController,
                       maxLines: 4,
@@ -377,15 +375,12 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         border: OutlineInputBorder(),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     TextButton.icon(
                       onPressed: _pickImages,
                       icon: const Icon(Icons.add_a_photo),
                       label: const Text(AppStrings.images),
                     ),
-
                     if (_selectedImages.isNotEmpty)
                       SizedBox(
                         height: 80,
@@ -404,9 +399,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           },
                         ),
                       ),
-
                     const SizedBox(height: 20),
-
                     ElevatedButton(
                       onPressed: createTicket,
                       child: const Text(AppStrings.send),
