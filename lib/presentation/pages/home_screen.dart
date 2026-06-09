@@ -35,12 +35,12 @@ class _HomeScreen extends State<HomeScreen> {
     );
   }
 
-  void ticketMapScreen(BuildContext context){
-    Navigator.push(context,
-    MaterialPageRoute(builder: (context) => const TicketsMapScreen())
+  void ticketMapScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TicketsMapScreen()),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -172,13 +172,11 @@ class _HomeScreen extends State<HomeScreen> {
                     ),
                   ),
 
-                
-
                   GestureDetector(
                     onTap: () => ticketMapScreen(context),
                     child: Container(
                       padding: const EdgeInsets.all(20),
-                       margin: const EdgeInsets.only(bottom: 20),
+                      margin: const EdgeInsets.only(bottom: 20),
                       decoration: BoxDecoration(
                         color: Appcolors.white,
                         borderRadius: BorderRadius.circular(18),
@@ -187,8 +185,8 @@ class _HomeScreen extends State<HomeScreen> {
                             color: Appcolors.green2.withValues(),
                             blurRadius: 15,
                             offset: const Offset(0, 8),
-                          )
-                        ]
+                          ),
+                        ],
                       ),
                       child: Row(
                         children: const [
@@ -203,17 +201,17 @@ class _HomeScreen extends State<HomeScreen> {
                               AppStrings.googleMaps,
                               style: TextStyle(
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios, size: 18,)
+                          Icon(Icons.arrow_forward_ios, size: 18),
                         ],
                       ),
                     ),
                   ),
 
-                    GestureDetector(
+                  GestureDetector(
                     onTap: () => settingScreen(context),
                     child: Container(
                       padding: const EdgeInsets.all(20),

@@ -33,5 +33,24 @@ class SecureStorage {
     return id != null ? int.parse(id) : null;
   }
 
+  Future<void> saveLocationId(int id) async {
+    await _storage.write(key: 'locationId', value: id.toString());
+  }
+
+  Future<int?> getLocationId() async {
+    final id = await _storage.read(key: 'locationId');
+    return id != null ? int.parse(id) : null;
+  }
+
+  Future<void> saveLocationGroupId(int id) async {
+    await _storage.write(key: 'locationGroupId', value: id.toString());
+  }
+
+  Future<int?> getLocationGroupId() async {
+    final id = await _storage.read(key: 'locationGroupId');
+    return id != null ? int.parse(id) : null;
+  }
+
+
 
 }

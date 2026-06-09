@@ -21,30 +21,28 @@ class _SplashScreenState extends State<SplashScreen>
     _controller = AnimationController(vsync: this);
   }
 
-Future<void> _handleNavigation(LottieComposition composition) async {
-  _controller.duration = composition.duration;
-  await _controller.forward();
+  Future<void> _handleNavigation(LottieComposition composition) async {
+    _controller.duration = composition.duration;
+    await _controller.forward();
 
-  final minimumDelay = Future.delayed(const Duration(seconds: 2));
-  await minimumDelay;
+    final minimumDelay = Future.delayed(const Duration(seconds: 2));
+    await minimumDelay;
 
-  final storage = AuthStorage();
-  final token = await storage.getAccessToken();
+    final storage = AuthStorage();
+    final token = await storage.getAccessToken();
 
-  if (!mounted) return;
+    if (!mounted) return;
 
-  if (token != null && token.isNotEmpty) {
-   
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
-  } else {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const Loginscreen()),
-    );
+    if (token != null && token.isNotEmpty) {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    } else {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const Loginscreen()));
+    }
   }
-}
-
 
   @override
   void dispose() {

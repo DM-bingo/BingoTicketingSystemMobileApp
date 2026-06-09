@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bingo_ticketing_system_mobile/core/constants/api_constants.dart';
+import 'package:bingo_ticketing_system_mobile/core/error/exceptions.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/category_model.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
 import 'package:http/http.dart' as http;
@@ -12,16 +13,14 @@ class CategoryService {
     final response = await http.get(
       Uri.parse(ApiConstants.categoriesUrl),
       headers: {
-         'Content-Type': 'application/json',
-         'Authorization': 'Bearer $token', 
-      }
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
-    if(response.statusCode == 200){
-      final List data = jsonDecode(response.body);
-      return data.map((e) => CategoryModel.fromJson(e)).toList();
-    }
+    handleApiResponse(response.statusCode, response.body);
 
-    throw Exception("Ne mogu ucitatt ove kategorijee alooo");
+    final List data = jsonDecode(response.body);
+    return data.map((e) => CategoryModel.fromJson(e)).toList();
   }
 }

@@ -6,7 +6,7 @@ class UserModel extends UserEntity {
     required super.username,
     required super.passwordHash,
     required super.role,
-    required super.activatonCode,
+    required super.activationCode ,
     required super.isActive,
     required super.refreshToken,
     required super.refreshTokenExpiryTime
@@ -19,11 +19,10 @@ class UserModel extends UserEntity {
             username: json['Username'], 
             passwordHash: json['PasswordHash'], 
             role: json['Role'],
-            activatonCode: json['ActivationCode'],         
+            activationCode: json['ActivationCode'],
             isActive: json['IsActive'],
             refreshToken: json['RefreshToken'],     
             refreshTokenExpiryTime: json['RefreshTokenExpiryTime']
             );
-            
   }
 }

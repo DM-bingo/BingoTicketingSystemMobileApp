@@ -12,7 +12,7 @@ class _TicketsMapScreenState extends State<TicketsMapScreen> {
   final Set<Marker> markers = {
     Marker(
       markerId: const MarkerId("1"),
-      position: const LatLng(44.537, 18.676), 
+      position: const LatLng(44.537, 18.676),
       infoWindow: const InfoWindow(
         title: "Printer ne radi",
         snippet: "IT održavanje",
@@ -21,10 +21,7 @@ class _TicketsMapScreenState extends State<TicketsMapScreen> {
     Marker(
       markerId: const MarkerId("2"),
       position: const LatLng(44.530, 18.700),
-      infoWindow: const InfoWindow(
-        title: "Kasa problem",
-        snippet: "Cash desk",
-      ),
+      infoWindow: const InfoWindow(title: "Kasa problem", snippet: "Cash desk"),
     ),
   };
 

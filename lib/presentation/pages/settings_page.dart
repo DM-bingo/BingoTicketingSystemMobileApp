@@ -34,7 +34,7 @@ class _SettingsPage extends State<SettingsPage> {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await controller.logout();
-              if(!context.mounted) return;
+              if (!context.mounted) return;
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (_) => const Loginscreen()),
@@ -44,9 +44,7 @@ class _SettingsPage extends State<SettingsPage> {
           ),
         ],
       ),
-      body: const Center(
-        child: Text("Za odjavu samo"),
-      ),
+      body: const Center(child: Text("Za odjavu samo")),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/storage/secure_storage.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/category_service.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bingo_ticketing_system_mobile/data/models/category_model.dart';
-import 'dart:convert';
+
 class PriorityItem {
   final String label;
   final int value;
@@ -32,7 +33,12 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   String? selectedLevel2;
   String? selectedLevel3;
   String? selectedLevel4;
+
   int? selectedPriority = 1;
+  int? selectedLocationId;
+
+  int? userLocationId;
+  int? userLocationGroupId;
 
   final List<PriorityItem> priorities = [
     PriorityItem("Nizak", 0),
@@ -45,19 +51,26 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
   final CreateNewTicketService _ticketService = CreateNewTicketService();
 
-  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _descriptionController =
+  TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchCategories();
-    fetchUsername();
+    fetchUserData();
   }
 
-  Future<void> fetchUsername() async {
-    final name = await SecureStorage().getUsername();
+  Future<void> fetchUserData() async {
+    final storage = SecureStorage();
+    final name = await storage.getUsername();
+    final locId = await storage.getLocationId();
+    final locGroupId = await storage.getLocationGroupId();
+
     setState(() {
       username = name;
+      userLocationId = locId;
+      userLocationGroupId = locGroupId;
     });
   }
 
@@ -120,9 +133,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   Future<void> createTicket() async {
     final selectedId =
         selectedLevel4 ??
-        selectedLevel3 ??
-        selectedLevel2 ??
-        selectedLevel1;
+            selectedLevel3 ??
+            selectedLevel2 ??
+            selectedLevel1;
 
     if (selectedId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -138,8 +151,21 @@ class _CreateNewTicket extends State<CreateNewTicket> {
       return;
     }
 
-    final base64Images = await convertImagesToBase64();
+    int locationToSend;
 
+    if (userLocationGroupId != null) {
+      if (selectedLocationId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Odaberi lokaciju")),
+        );
+        return;
+      }
+      locationToSend = selectedLocationId!;
+    } else {
+      locationToSend = userLocationId!;
+    }
+
+    final base64Images = await convertImagesToBase64();
     final categoryId = int.parse(selectedId);
 
     final success = await _ticketService.createTicket(
@@ -148,6 +174,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
       title: getSelectedCategoryName(),
       description: _descriptionController.text,
       photosBase64: base64Images,
+      locationId: locationToSend,
     );
 
     if (!mounted) return;
@@ -169,14 +196,16 @@ class _CreateNewTicket extends State<CreateNewTicket> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(
-          const SnackBar(content: Text("Greška pri kreiranju")));
+        const SnackBar(content: Text("Greška pri kreiranju")),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+          body: Center(child: CircularProgressIndicator()));
     }
 
     final level2 = selectedLevel1 == null
@@ -242,22 +271,10 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       items: priorities
                           .map(
                             (p) => DropdownMenuItem(
-                              value: p.value,
-                              child: Text(
-                                p.label,
-                                style: TextStyle(
-                                  color: p.label.toLowerCase() == "nizak"
-                                      ? Appcolors.nizak
-                                      : p.label.toLowerCase() == 'srednji'
-                                          ? Appcolors.srednji
-                                          : p.label.toLowerCase() == 'visok'
-                                              ? Appcolors.visok
-                                              : Appcolors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          )
+                          value: p.value,
+                          child: Text(p.label),
+                        ),
+                      )
                           .toList(),
                       onChanged: (v) {
                         setState(() {
@@ -277,10 +294,10 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                       items: getRootCategories()
                           .map(
                             (c) => DropdownMenuItem(
-                              value: c.id.toString(),
-                              child: Text(c.name),
-                            ),
-                          )
+                          value: c.id.toString(),
+                          child: Text(c.name),
+                        ),
+                      )
                           .toList(),
                       onChanged: (v) {
                         setState(() {
@@ -297,17 +314,14 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                         initialValue: selectedLevel2,
                         decoration: InputDecoration(
                           labelText: "Podkategorija",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                         ),
                         items: level2
                             .map(
                               (c) => DropdownMenuItem(
-                                value: c.id.toString(),
-                                child: Text(c.name),
-                              ),
-                            )
+                            value: c.id.toString(),
+                            child: Text(c.name),
+                          ),
+                        )
                             .toList(),
                         onChanged: (v) {
                           setState(() {
@@ -317,62 +331,12 @@ class _CreateNewTicket extends State<CreateNewTicket> {
                           });
                         },
                       ),
-                    const SizedBox(height: 15),
-                    if (level3.isNotEmpty)
-                      DropdownButtonFormField<String>(
-                        initialValue: selectedLevel3,
-                        decoration: InputDecoration(
-                          labelText: "Detaljnije",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        items: level3
-                            .map(
-                              (c) => DropdownMenuItem(
-                                value: c.id.toString(),
-                                child: Text(c.name),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (v) {
-                          setState(() {
-                            selectedLevel3 = v;
-                            selectedLevel4 = null;
-                          });
-                        },
-                      ),
-                    const SizedBox(height: 15),
-                    if (level4.isNotEmpty)
-                      DropdownButtonFormField<String>(
-                        initialValue: selectedLevel4,
-                        decoration: InputDecoration(
-                          labelText: "Poslednja kategorija",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        items: level4
-                            .map(
-                              (c) => DropdownMenuItem(
-                                value: c.id.toString(),
-                                child: Text(c.name),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (v) {
-                          setState(() {
-                            selectedLevel4 = v;
-                          });
-                        },
-                      ),
                     const SizedBox(height: 10),
                     TextField(
                       controller: _descriptionController,
                       maxLines: 4,
                       decoration: const InputDecoration(
                         hintText: "Opis...",
-                        border: OutlineInputBorder(),
                       ),
                     ),
                     const SizedBox(height: 10),

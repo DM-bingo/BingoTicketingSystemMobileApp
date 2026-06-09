@@ -18,28 +18,33 @@ class Loginscreen extends StatefulWidget {
 class _LoginscreenState extends State<Loginscreen> {
   final TextEditingController _passwordController = TextEditingController();
 
+  final controller = AuthController(
+    AuthRepositoryImpl(AuthService()),
+    AuthStorage(),
+  );
 
-final controller = AuthController(
-  AuthRepositoryImpl(AuthService()),
-  AuthStorage(),
-);
+  void login(BuildContext context) async {
+    try {
+      print("POZVAN LOGIN");
+      bool success = await controller.login(_passwordController.text);
 
-void login(BuildContext context) async {
-  bool success = await controller.login(_passwordController.text);
+      if (!context.mounted) return;
 
-  if (!context.mounted) return;
+      if (success) {
+        print("IDEM NA HOME");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
 
-  if (success) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Aktivacijski kod nije validan")),
-    );
+        );
+        print("SUCCESS: $success");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
   }
-}
 
   @override
   void dispose() {
@@ -138,8 +143,7 @@ void login(BuildContext context) async {
                   FadeInUp(
                     duration: const Duration(milliseconds: 1700),
                     child: GestureDetector(
-                      onTap: () =>
-                          login(context),
+                      onTap: () => login(context),
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
