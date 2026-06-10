@@ -60,7 +60,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              ticket.categoryName,
+                              ticket.categoryLabel,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -94,7 +94,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          ticket.status,
+                          ticket.statusLabel,
                           style: const TextStyle(
                             color: Colors.orange,
                             fontSize: 12,
@@ -126,7 +126,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       const SizedBox(width: 6),
                       const Text('Odgovorna osoba: '),
                       Text(
-                        ticket.assignedToUsername,
+                        ticket.createdByUserId.toString(),
                         style:
                             const TextStyle(fontWeight: FontWeight.w500),
                       ),
@@ -140,7 +140,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       const SizedBox(width: 6),
                       const Text('Kreirao: '),
                       Text(
-                        ticket.createdByUsername,
+                        ticket.createdByUserId.toString(),
                         style:
                             const TextStyle(fontWeight: FontWeight.w500),
                       ),
@@ -171,13 +171,15 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                             padding: const EdgeInsets.only(right: 10),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                "http://172.23.207.83:5000${images[i].photoUrl}",
-                                width: 120,
-                                height: 120,
-                                cacheWidth: 300,
-                                fit: BoxFit.cover,
-                              ),
+                               child: Image.network(
+                                  images[i].photoUrl.startsWith('/')
+                                      ? "http://172.23.207.83:5000${images[i].photoUrl}"
+                                      : "http://172.23.207.83:5000/${images[i].photoUrl}",
+                                  width: 120,
+                                  height: 120,
+                                  cacheWidth: 300,
+                                  fit: BoxFit.cover,
+                                ),
                             ),
                           );
                         },

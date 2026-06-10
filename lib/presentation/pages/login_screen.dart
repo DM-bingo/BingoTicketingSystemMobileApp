@@ -25,19 +25,19 @@ class _LoginscreenState extends State<Loginscreen> {
 
   void login(BuildContext context) async {
     try {
-      print("POZVAN LOGIN");
+      debugPrint("POZVAN LOGIN");
       bool success = await controller.login(_passwordController.text);
 
       if (!context.mounted) return;
 
       if (success) {
-        print("IDEM NA HOME");
+        debugPrint("IDEM NA HOME");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
 
         );
-        print("SUCCESS: $success");
+        debugPrint("SUCCESS: $success");
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

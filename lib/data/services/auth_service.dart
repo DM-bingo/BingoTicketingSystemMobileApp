@@ -15,8 +15,8 @@ class AuthService {
       }),
     );
 
-    print("STATUS: ${response.statusCode}");
-    print("BODY: ${response.body}");
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
 
     handleApiResponse(response.statusCode, response.body);
 

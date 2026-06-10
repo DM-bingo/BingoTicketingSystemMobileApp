@@ -1,4 +1,5 @@
 import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
+import 'package:flutter/cupertino.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class AuthController {
@@ -14,7 +15,7 @@ class AuthController {
   Future<bool> login(String otp) async {
     try {
       final result = await repository.login(otp);
-      print("RESULT: $result");
+      debugPrint("RESULT: $result");
 
       if (result != null) {
         await storage.saveTokens(
@@ -22,7 +23,7 @@ class AuthController {
           result['refreshToken'],
         );
 
-        print("TOKENS SAVED");
+        debugPrint("TOKENS SAVED");
 
         await storage.saveUsername(result['username']);
         await storage.saveUserId(result['userId']);
@@ -42,7 +43,7 @@ class AuthController {
 
       return false;
     } catch (e) {
-      print("LOGIN ERROR: $e");
+      debugPrint("LOGIN ERROR: $e");
       rethrow;
     }
   }
