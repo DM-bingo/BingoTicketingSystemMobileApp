@@ -1,6 +1,5 @@
 
 class AppStrings {
-
                 //LOGIN
   static const String login = 'Login';
   static const String enterPW = 'Unesite Aktivacijski Kod';

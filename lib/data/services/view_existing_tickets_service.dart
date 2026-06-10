@@ -13,6 +13,10 @@ class ViewExistingTicketsService {
     final token = await _storage.getAccessToken();
     final userId = await _storage.getUserId();
 
+    List<dynamic> _parseJson(String body){
+      return jsonDecode(body) as List<dynamic>;
+    }
+
     final response = await http.get(
       Uri.parse("${ApiConstants.fetchTickets}?userId=$userId"),
       headers: {'Authorization': 'Bearer $token'},
@@ -23,7 +27,7 @@ class ViewExistingTicketsService {
 
     handleApiResponse(response.statusCode, response.body);
 
-    final List data = jsonDecode(response.body);
+    final List data = await compute(_parseJson, response.body);
     return data.map((e) => TicketModel.fromJson(e)).toList();
   }
 }

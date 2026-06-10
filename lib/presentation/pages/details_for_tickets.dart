@@ -175,6 +175,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                                 "http://172.23.207.83:5000${images[i].photoUrl}",
                                 width: 120,
                                 height: 120,
+                                cacheWidth: 300,
                                 fit: BoxFit.cover,
                               ),
                             ),
