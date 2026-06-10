@@ -45,17 +45,29 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade50,
       body: Column(
         children: [
           Container(
-            height: 260,
+            height: 280,
             width: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Appcolors.green1, Appcolors.green2],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(36),
+                bottomRight: Radius.circular(36),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Appcolors.green2.withOpacity(0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Stack(
               children: [
@@ -95,6 +107,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                 : ListView.builder(
                     padding: const EdgeInsets.all(20),
                     itemCount: tickets.length,
+                    cacheExtent: 500,
                     itemBuilder: (context, index) {
                       final t = tickets[index];
 

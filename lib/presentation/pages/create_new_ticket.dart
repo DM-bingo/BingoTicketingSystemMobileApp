@@ -4,6 +4,7 @@ import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
 import 'package:bingo_ticketing_system_mobile/core/storage/secure_storage.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/category_service.dart';
 import 'package:bingo_ticketing_system_mobile/data/services/create_new_ticket_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,8 +52,7 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
   final CreateNewTicketService _ticketService = CreateNewTicketService();
 
-  final TextEditingController _descriptionController =
-  TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -117,37 +117,33 @@ class _CreateNewTicket extends State<CreateNewTicket> {
   Future<List<String>> convertImagesToBase64() async {
     List<String> base64Images = [];
 
-    for (var img in _selectedImages) {
-      try {
-        final file = File(img.path);
-        final bytes = await file.readAsBytes();
-        base64Images.add(base64Encode(bytes));
-      } catch (e) {
-        debugPrint("ERROR IMAGE: $e");
-      }
+    for(var img in _selectedImages){
+      final encoded = await compute(_encodeImage, img.path);
+      base64Images.add(encoded);
     }
-
     return base64Images;
+
+  }
+  String _encodeImage(String path){
+    final bytes = File(path).readAsBytesSync();
+    return base64Encode(bytes);
   }
 
   Future<void> createTicket() async {
     final selectedId =
-        selectedLevel4 ??
-            selectedLevel3 ??
-            selectedLevel2 ??
-            selectedLevel1;
+        selectedLevel4 ?? selectedLevel3 ?? selectedLevel2 ?? selectedLevel1;
 
     if (selectedId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Odaberi kategoriju")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Odaberi kategoriju")));
       return;
     }
 
     if (_descriptionController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Unesi opis")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Unesi opis")));
       return;
     }
 
@@ -155,9 +151,9 @@ class _CreateNewTicket extends State<CreateNewTicket> {
 
     if (userLocationGroupId != null) {
       if (selectedLocationId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Odaberi lokaciju")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Odaberi lokaciju")));
         return;
       }
       locationToSend = selectedLocationId!;
@@ -165,8 +161,16 @@ class _CreateNewTicket extends State<CreateNewTicket> {
       locationToSend = userLocationId!;
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     final base64Images = await convertImagesToBase64();
     final categoryId = int.parse(selectedId);
+
+    setState(() {
+      _isLoading = false;
+    });
 
     final success = await _ticketService.createTicket(
       categoryId: categoryId,
@@ -195,17 +199,14 @@ class _CreateNewTicket extends State<CreateNewTicket> {
     } else {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(
-        const SnackBar(content: Text("Greška pri kreiranju")),
-      );
+      ).showSnackBar(const SnackBar(content: Text("Greška pri kreiranju")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-          body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final level2 = selectedLevel1 == null
@@ -221,158 +222,217 @@ class _CreateNewTicket extends State<CreateNewTicket> {
         : getChildren(int.parse(selectedLevel3!));
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: 260,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Appcolors.green1, Appcolors.green2],
-                  ),
+      backgroundColor: Colors.grey.shade50,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: 220,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Appcolors.green1, Appcolors.green2],
                 ),
-                child: const Center(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(32),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Appcolors.green1.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                bottom: false,
+                child: Center(
                   child: Text(
                     AppStrings.createTicket,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 26,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: username ?? "",
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "Korisnik",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    initialValue: username ?? "",
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: "Korisnik",
+                      prefixIcon: const Icon(Icons.person_outline),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  DropdownButtonFormField<int>(
+                    value: selectedPriority,
+                    decoration: InputDecoration(
+                      labelText: "Prioritet",
+                      prefixIcon: const Icon(Icons.outlined_flag),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    DropdownButtonFormField<int>(
-                      initialValue: selectedPriority,
-                      decoration: InputDecoration(
-                        labelText: "Prioritet",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                    items: priorities
+                        .map(
+                          (p) => DropdownMenuItem(
+                            value: p.value,
+                            child: Text(p.label),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (v) {
+                      setState(() => selectedPriority = v);
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  DropdownButtonFormField<String>(
+                    value: selectedLevel1,
+                    decoration: InputDecoration(
+                      labelText: "Tip zahtjeva",
+                      prefixIcon: const Icon(Icons.layers_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      items: priorities
-                          .map(
-                            (p) => DropdownMenuItem(
-                          value: p.value,
-                          child: Text(p.label),
-                        ),
-                      )
-                          .toList(),
-                      onChanged: (v) {
-                        setState(() {
-                          selectedPriority = v;
-                        });
-                      },
                     ),
-                    const SizedBox(height: 15),
+                    items: getRootCategories()
+                        .map(
+                          (c) => DropdownMenuItem(
+                            value: c.id.toString(),
+                            child: Text(c.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (v) {
+                      setState(() {
+                        selectedLevel1 = v;
+                        selectedLevel2 = null;
+                        selectedLevel3 = null;
+                        selectedLevel4 = null;
+                      });
+                    },
+                  ),
+                  if (level2.isNotEmpty) ...[
+                    const SizedBox(height: 18),
                     DropdownButtonFormField<String>(
-                      initialValue: selectedLevel1,
+                      value: selectedLevel2,
                       decoration: InputDecoration(
-                        labelText: "Tip zahtjeva",
+                        labelText: "Podkategorija",
+                        prefixIcon: const Icon(Icons.account_tree_outlined),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      items: getRootCategories()
+                      items: level2
                           .map(
                             (c) => DropdownMenuItem(
-                          value: c.id.toString(),
-                          child: Text(c.name),
-                        ),
-                      )
+                              value: c.id.toString(),
+                              child: Text(c.name),
+                            ),
+                          )
                           .toList(),
                       onChanged: (v) {
                         setState(() {
-                          selectedLevel1 = v;
-                          selectedLevel2 = null;
+                          selectedLevel2 = v;
                           selectedLevel3 = null;
                           selectedLevel4 = null;
                         });
                       },
                     ),
-                    const SizedBox(height: 15),
-                    if (level2.isNotEmpty)
-                      DropdownButtonFormField<String>(
-                        initialValue: selectedLevel2,
-                        decoration: InputDecoration(
-                          labelText: "Podkategorija",
-                        ),
-                        items: level2
-                            .map(
-                              (c) => DropdownMenuItem(
-                            value: c.id.toString(),
-                            child: Text(c.name),
-                          ),
-                        )
-                            .toList(),
-                        onChanged: (v) {
-                          setState(() {
-                            selectedLevel2 = v;
-                            selectedLevel3 = null;
-                            selectedLevel4 = null;
-                          });
-                        },
-                      ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _descriptionController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        hintText: "Opis...",
+                  ],
+                  const SizedBox(height: 18),
+                  TextField(
+                    controller: _descriptionController,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      hintText: "Opis...",
+                      alignLabelWithHint: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    TextButton.icon(
-                      onPressed: _pickImages,
-                      icon: const Icon(Icons.add_a_photo),
-                      label: const Text(AppStrings.images),
+                  ),
+                  const SizedBox(height: 16),
+                  OutlinedButton.icon(
+                    onPressed: _pickImages,
+                    icon: const Icon(Icons.add_a_photo_outlined),
+                    label: const Text(AppStrings.images),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    if (_selectedImages.isNotEmpty)
-                      SizedBox(
-                        height: 80,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _selectedImages.length,
-                          itemBuilder: (_, i) {
-                            return Padding(
-                              padding: const EdgeInsets.all(4),
+                  ),
+                  if (_selectedImages.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      height: 90,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _selectedImages.length,
+                        itemBuilder: (_, i) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
                               child: Image.file(
                                 File(_selectedImages[i].path),
-                                width: 80,
+                                width: 90,
+                                cacheWidth: 200,
                                 fit: BoxFit.cover,
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: createTicket,
-                      child: const Text(AppStrings.send),
                     ),
                   ],
-                ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: createTicket,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Appcolors.green1,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      AppStrings.send,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
