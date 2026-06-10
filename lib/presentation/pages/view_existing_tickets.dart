@@ -63,7 +63,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Appcolors.green2.withOpacity(0.3),
+                  color: Appcolors.green2.withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -148,7 +148,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                           ),
                                         ),
                                         child: Text(
-                                          t.categoryName,
+                                          t.statusLabel,
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
@@ -184,7 +184,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
-                                      t.status,
+                                      t.statusLabel,
                                       style: const TextStyle(
                                         color: Colors.orange,
                                         fontSize: 12,
@@ -226,7 +226,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                     color: Appcolors.green1,
                                   ),
                                   const SizedBox(width: 6),
-                                  Text(t.assignedToUsername),
+                                  Text(t.createdByUserId.toString()),
                                   const SizedBox(width: 25),
                                   const Icon(
                                     Icons.calendar_today,

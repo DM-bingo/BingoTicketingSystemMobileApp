@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bingo_ticketing_system_mobile/core/constants/api_constants.dart';
 import 'package:bingo_ticketing_system_mobile/core/error/exceptions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:bingo_ticketing_system_mobile/data/services/auth_storage.dart';
 
@@ -36,8 +37,8 @@ class CreateNewTicketService {
     );
 
 
-    print("STATUS: ${response.statusCode}");
-    print("BODY: ${response.body}");
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
 
 
     handleApiResponse(response.statusCode, response.body);

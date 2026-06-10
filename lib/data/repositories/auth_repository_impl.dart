@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../domain/repositories/auth_repository.dart';
 import '../services/auth_service.dart';
 
@@ -12,7 +14,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await service.activateUser(otp);
       return result;
     } catch (e) {
-      print("ERROR: $e");
+      debugPrint("ERROR: $e");
       return null;
     }
   }
