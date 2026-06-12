@@ -126,49 +126,41 @@ class LiquidBubblePainter extends CustomPainter {
     final double pad = 5.0;
     final double r = (h / 2) - pad;
 
-    // Pozicija centra bubble-a (lijevo=0.0, desno=1.0)
     final double cx = pad + r + progress * (halfW - pad * 2);
 
-    // Liquid deformacija - bubble se razvlači tokom animacije
-    // Na sredini (progress~0.5) bubble je najviše razvučen
     final double stretch = sin(progress * pi);
-    final double rx = r + stretch * r * 0.55; // horizontalni radijus
-    final double ry = r - stretch * r * 0.28; // vertikalni radijus (spljoštavanje)
+    final double rx = r + stretch * r * 0.55;
+    final double ry = r - stretch * r * 0.28;
 
     final double cy = h / 2;
-
-    // Crtamo liquid blob sa cubic bezier krivama
     _drawLiquidBlob(canvas, paint, cx, cy, rx, ry, stretch);
   }
 
   void _drawLiquidBlob(Canvas canvas, Paint paint, double cx, double cy,
       double rx, double ry, double stretch) {
-    // Kontrolne tačke za organic blob oblik
     final double wobble = stretch * ry * 0.3;
 
     final path = Path();
 
-    // Koristimo 4 cubic bezier segmenta za blob
-    // Gornja lijeva kriva
     path.moveTo(cx, cy - ry);
     path.cubicTo(
       cx + rx * 0.55, cy - ry + wobble,
       cx + rx, cy - ry * 0.55,
       cx + rx, cy,
     );
-    // Donja desna kriva
+
     path.cubicTo(
       cx + rx, cy + ry * 0.55,
       cx + rx * 0.55, cy + ry - wobble,
       cx, cy + ry,
     );
-    // Donja lijeva kriva
+
     path.cubicTo(
       cx - rx * 0.55, cy + ry + wobble,
       cx - rx, cy + ry * 0.55,
       cx - rx, cy,
     );
-    // Gornja lijeva kriva
+
     path.cubicTo(
       cx - rx, cy - ry * 0.55,
       cx - rx * 0.55, cy - ry - wobble,
@@ -178,7 +170,7 @@ class LiquidBubblePainter extends CustomPainter {
     path.close();
     canvas.drawPath(path, paint);
 
-    // Highlight - sjaj na bubblu
+
     final highlightPaint = Paint()
       ..color = Colors.white.withValues(alpha: 0.25)
       ..style = PaintingStyle.fill;
