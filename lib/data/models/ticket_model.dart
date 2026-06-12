@@ -3,12 +3,10 @@ class TicketModel {
   final String title;
   final String description;
   final List<TicketImageModel> images;
-  final String categoryName;
-  final String priority;  
-  final String status;     
+  final String priority;
+  final String status;
   final String createdByUsername;
   final String categoryName;
-
   final String createdAt;
 
   TicketModel({
@@ -21,26 +19,23 @@ class TicketModel {
     required this.createdByUsername,
     required this.categoryName,
     required this.createdAt,
-    this.categoryName = "",
   });
 
- factory TicketModel.fromJson(Map<String, dynamic> json) {
-  return TicketModel(
-    id: json['id'] ?? 0,
-    title: json['title'] ?? "",
-    description: json['description'] ?? "",
-    images: (json['images'] as List<dynamic>?)
-        ?.map((e) => TicketImageModel.fromJson(e))
-        .toList() ?? [],
-    priority: json['priority'] ?? 0,
-    statusId: json['statusId'] ?? 0,
-    categoryId: json['categoryId'] ?? 0,
-    createdByUserId: json['createdByUserId'] ?? 0,
-    assignedToUserId: json['assignedToUserId'],
-    createdAt: json['createdAt'] ?? "",
-    categoryName: json['category']?['name'] ?? "ID ${json['categoryId']}",
-  );
-}
+  factory TicketModel.fromJson(Map<String, dynamic> json) {
+    return TicketModel(
+      id: json['id'] ?? 0,
+      title: json['title'] ?? "",
+      description: json['description'] ?? "",
+      images: (json['images'] as List<dynamic>?)
+          ?.map((e) => TicketImageModel.fromJson(e))
+          .toList() ?? [],
+      priority: json['priority']?.toString() ?? "Low",
+      status: json['status'] ?? "Open",
+      createdByUsername: json['createdByUsername'] ?? json['createdByUserId']?.toString() ?? "",
+      categoryName: json['category']?['name'] ?? json['categoryName'] ?? "Nepoznato",
+      createdAt: json['createdAt'] ?? "",
+    );
+  }
 
   String get priorityLabel {
     if (priority == "High") return "Visok";
@@ -54,5 +49,17 @@ class TicketModel {
     return "Zatvoren";
   }
 
- String get categoryLabel => categoryName.isNotEmpty ? categoryName : "ID $categoryId";
+  String get categoryLabel => categoryName.isNotEmpty ? categoryName : "Nema kategorije";
+}
+
+class TicketImageModel {
+  final String imageUrl;
+
+  TicketImageModel({required this.imageUrl});
+
+  factory TicketImageModel.fromJson(Map<String, dynamic> json) {
+    return TicketImageModel(
+      imageUrl: json['photoUrl'] ?? json['imageUrl'] ?? "",
+    );
+  }
 }
