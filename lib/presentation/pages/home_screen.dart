@@ -1,7 +1,7 @@
 import 'package:bingo_ticketing_system_mobile/presentation/pages/create_new_ticket.dart';
 import 'package:bingo_ticketing_system_mobile/presentation/pages/settings_page.dart';
 import 'package:bingo_ticketing_system_mobile/presentation/pages/ticket_maps_screen.dart';
-import 'package:bingo_ticketing_system_mobile/presentation/pages/view_existing_tickets.dart';
+import 'package:bingo_ticketing_system_mobile/presentation/pages/tickets_screen.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:bingo_ticketing_system_mobile/core/constants/app_colors.dart';
@@ -24,7 +24,7 @@ class _HomeScreen extends State<HomeScreen> {
   void viewTicketsScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ViewExistingTickets()),
+      MaterialPageRoute(builder: (context) => const TicketsScreen()),
     );
   }
 
