@@ -172,9 +172,9 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                                child: Image.network(
-                                  images[i].photoUrl.startsWith('/')
-                                      ? "http://172.23.207.83:5000${images[i].photoUrl}"
-                                      : "http://172.23.207.83:5000/${images[i].photoUrl}",
+                                  images[i].imageUrl.startsWith('/')
+                                      ? "http://172.23.207.83:5000${images[i].imageUrl}"
+                                      : "http://172.23.207.83:5000/${images[i].imageUrl}",
                                   width: 120,
                                   height: 120,
                                   cacheWidth: 300,
@@ -210,5 +210,3 @@ class _DetailsForTickets extends State<DetailsForTickets> {
     );
   }
 }
-
-//need fix here

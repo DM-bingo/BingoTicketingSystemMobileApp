@@ -59,14 +59,5 @@ class TicketModel {
   String get categoryLabel => "ID $categoryId";
 }
 
-class TicketImageModel {
-  final String photoUrl;
 
-  TicketImageModel({required this.photoUrl});
 
-  factory TicketImageModel.fromJson(Map<String, dynamic> json) {
-    return TicketImageModel(
-      photoUrl: json['imageUrl'] ?? json['ImageUrl'] ?? "",
-    );
-  }
-}
