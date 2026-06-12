@@ -226,7 +226,7 @@ class _ViewExistingTickets extends State<ViewExistingTickets> {
                                     color: Appcolors.green1,
                                   ),
                                   const SizedBox(width: 6),
-                                  Text(t.createdByUserId.toString()),
+                                  Text(t.createdByUsername),
                                   const SizedBox(width: 25),
                                   const Icon(
                                     Icons.calendar_today,
