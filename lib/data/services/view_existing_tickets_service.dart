@@ -14,24 +14,24 @@ List<dynamic> parseJson(String body) {
 class ViewExistingTicketsService {
   final _storage = AuthStorage();
 
-  Future<List<TicketModel>> fetchTickets() async {
-    final token = await _storage.getAccessToken();
+ Future<List<TicketModel>> fetchTickets() async {
+  final token = await _storage.getAccessToken();
+  final userId = await _storage.getUserId(); 
 
-    final response = await http.get(
-      Uri.parse(ApiConstants.fetchTickets),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
+  final response = await http.get(
+    Uri.parse("${ApiConstants.fetchTickets}?userId=$userId"), 
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+  );
 
-    debugPrint("STATUS: ${response.statusCode}");
-    debugPrint("BODY: ${response.body}");
+  debugPrint("STATUS: ${response.statusCode}");
+  debugPrint("BODY: ${response.body}");
 
-    handleApiResponse(response.statusCode, response.body);
+  handleApiResponse(response.statusCode, response.body);
 
-    final List data = await compute(parseJson, response.body);
-
-    return data.map((e) => TicketModel.fromJson(e)).toList();
-  }
+  final List data = await compute(parseJson, response.body);
+  return data.map((e) => TicketModel.fromJson(e)).toList();
+}
 }

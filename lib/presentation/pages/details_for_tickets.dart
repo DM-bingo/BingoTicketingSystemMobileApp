@@ -126,7 +126,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       const SizedBox(width: 6),
                       const Text('Odgovorna osoba: '),
                       Text(
-                        ticket.createdByUserId.toString(),
+                        ticket.createdByUsername,
                         style:
                             const TextStyle(fontWeight: FontWeight.w500),
                       ),
@@ -140,7 +140,7 @@ class _DetailsForTickets extends State<DetailsForTickets> {
                       const SizedBox(width: 6),
                       const Text('Kreirao: '),
                       Text(
-                        ticket.createdByUserId.toString(),
+                        ticket.createdByUsername,
                         style:
                             const TextStyle(fontWeight: FontWeight.w500),
                       ),
